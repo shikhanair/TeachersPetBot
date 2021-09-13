@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 
 #load_dotenv()
 #TOKEN = os.getenv('DISCORD_TOKEN')
-TOKEN = 'ODg0ODU1NTgyMjI4NjI3NTI2.YTej-g.vVAhK9VWSuQm7O8pkVgssdS-bP0'
+TOKEN = ''
 #GUILD = 'TeachersPet-Dev'
 client = discord.Client()
 
