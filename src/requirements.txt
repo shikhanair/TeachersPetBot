@@ -1,0 +1,3 @@
+install Python
+pip install Discord
+pip install dotenv
