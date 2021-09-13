@@ -5,9 +5,9 @@ from dotenv import load_dotenv
 
 import init_server
 import group_finding
-import calendar
+import cal
 import office_hours
-import profanity_filter
+import profanity
 import qna
 import logging
 
@@ -57,7 +57,7 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-'''
+
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -68,7 +68,7 @@ async def on_message(message):
         await message.channel.send(response)
 
     # profanity_filter.check_profanity(...args)
-'''
+
 '''
 NOTE: bot commands don't work if client methods or bot on_message is implemented
 '''
