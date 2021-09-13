@@ -14,37 +14,10 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-#load_dotenv()
-#TOKEN = os.getenv('DISCORD_TOKEN')
-TOKEN = ''
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
 #GUILD = 'TeachersPet-Dev'
 client = discord.Client()
-
-'''
-@client.event
-async def on_ready():
-    guild = discord.utils.find(lambda g: g.name == GUILD, client.guilds)
-    print(
-        f'{client.user} is connected to the following guild:\n'
-        f'{guild.name}(id: {guild.id})'
-    )
-
-client.run(TOKEN)
-
-@client.event
-async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
-
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('!hello'):
-        await message.channel.send('Hello!')
-
-client.run(TOKEN)
-'''
 
 intents=discord.Intents.default()
 bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
@@ -63,11 +36,16 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
+    if(profanity.check_profanity(message.content)):
+        await message.channel.send('User says: ' + profanity.censor_profanity(message.content))
+        await message.delete()
+
+    await bot.process_commands(message)
+
     if message.content == 'hey bot':
-        response = 'hi user!!!'
+        response = 'hey yourself'
         await message.channel.send(response)
 
-    # profanity_filter.check_profanity(...args)
 
 '''
 NOTE: bot commands don't work if client methods or bot on_message is implemented

@@ -1,5 +1,5 @@
 install Python
-pip install Discord
-pip install dotenv
+pip install -U Discord
+pip install -U python-dotenv
 pip install profanity-filter
 python -m spacy download en
