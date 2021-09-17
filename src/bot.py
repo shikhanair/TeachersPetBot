@@ -17,11 +17,12 @@ logging.basicConfig(level=logging.INFO)
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 #GUILD = 'TeachersPet-Dev'
-client = discord.Client()
 
 intents=discord.Intents.default()
 bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
 intents.members = True
+
+office_hours.init(bot)
 
 @bot.event
 async def on_ready():
@@ -55,11 +56,9 @@ async def test(ctx):
     await ctx.send('test successful')
 
 # office hour commands
-@bot.command('oh')
-@commands.has_role('admin')
-async def office_hour_command():
-    # office_hours.office_hour_command(args)
-    pass
+@bot.command(name='oh', help='Operations relevant for office hours.')
+async def office_hour_command(*args):
+    await office_hours.office_hour_command(*args)
 
 @bot.command('ask')
 async def ask_question():
