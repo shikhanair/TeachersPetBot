@@ -37,7 +37,7 @@ async def on_message(message):
         return
 
     if(profanity.check_profanity(message.content)):
-        await message.channel.send('User says: ' + profanity.censor_profanity(message.content))
+        await message.channel.send(message.author.name + ' says: ' + profanity.censor_profanity(message.content))
         await message.delete()
 
     await bot.process_commands(message)
