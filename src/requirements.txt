@@ -1,5 +1,4 @@
-install Python
-pip install -U Discord
-pip install -U python-dotenv
-pip install profanity-filter
-python -m spacy download en
+discord.py==1.7.3
+profanity-filter==1.3.3
+numpy==1.21.2
+spacy==2.3.7
