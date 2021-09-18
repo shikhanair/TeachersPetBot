@@ -62,15 +62,14 @@ async def office_hour_command():
     pass
 
 @bot.command('ask')
-async def ask_question():
+async def ask_question(ctx, *, question):
+    await qna.question(ctx, question)
     # make sure to check that this is actually being asked in the Q&A channel
     # qna.ask(args)
-    pass
 
 @bot.command('answer')
-async def answer_question():
+async def answer_question(ctx, q_num, answer):
+    await qna.answer(ctx, q_num, answer)
     # make sure to check that this is actually being asked in the Q&A channel
-    # qna.answer(args)
-    pass
 
 bot.run(TOKEN)
