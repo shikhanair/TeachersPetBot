@@ -2,6 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+from discord_components import DiscordComponents, Button, ButtonStyle
 
 import init_server
 import group_finding
@@ -25,6 +26,7 @@ intents.members = True
 
 @bot.event
 async def on_ready():
+    DiscordComponents(bot)
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
@@ -46,13 +48,19 @@ async def on_message(message):
         response = 'hey yourself'
         await message.channel.send(response)
 
-
 '''
 NOTE: bot commands don't work if client methods or bot on_message is implemented
 '''
 @bot.command()
 async def test(ctx):
     await ctx.send('test successful')
+
+@bot.command('button')
+async def button_command(ctx):
+    await ctx.send("Content", components=[Button(style=ButtonStyle.blue, label="Blue"), Button(style=ButtonStyle.red, label="Red"), Button(style=ButtonStyle.URL, label="url", url="https://example.org")])
+    while True:
+        res = await bot.wait_for("button_click")
+        await res.send(content=f'{res.component.label} clicked')
 
 # office hour commands
 @bot.command('oh')
