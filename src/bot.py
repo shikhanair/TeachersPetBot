@@ -22,14 +22,13 @@ intents=discord.Intents.default()
 bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
 intents.members = True
 
-office_hours.init(bot)
-
 @bot.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
+    office_hours.init(bot)
 
 
 @bot.event
@@ -57,8 +56,8 @@ async def test(ctx):
 
 # office hour commands
 @bot.command(name='oh', help='Operations relevant for office hours.')
-async def office_hour_command(*args):
-    await office_hours.office_hour_command(*args)
+async def office_hour_command(ctx, command, *args):
+    await office_hours.office_hour_command(ctx, command, *args)
 
 @bot.command('ask')
 async def ask_question():
