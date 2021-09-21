@@ -2,6 +2,5 @@ install Python
 pip install -U Discord
 pip install -U python-dotenv
 pip install profanity-filter
-pip install psycopg2
 pip install schedule
 python -m spacy download en

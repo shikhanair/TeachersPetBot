@@ -1,16 +1,22 @@
-import psycopg2
+import sqlite3
+from sqlite3 import Error
 
+con = None
 def connect():
-    conn = None
+    global con
     try:
-        conn = psycopg2.connect(
-            host="localhost",
-            database="",
-            user="username",
-            password="password"
-        )
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-    finally:
-        if conn is not None:
-            conn.close()
+        con = sqlite3.connect('db.sqlite')
+        print("Connection to SQLite DB successful")
+    except Error as e:
+        print(f"The error '{e}' occurred when trying to connect to SQLite database")
+
+
+def select_query(sql):
+    cur = con.cursor()
+    return cur.execute(sql)
+
+
+def mutation_query(sql, args=()):
+    cur = con.cursor()
+    cur.execute(sql, args)
+    con.commit()

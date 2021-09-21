@@ -10,6 +10,7 @@ import office_hours
 import profanity
 import qna
 import logging
+import db
 
 logging.basicConfig(level=logging.INFO)
 
@@ -28,6 +29,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
+    db.connect()
     office_hours.init(bot)
 
 
