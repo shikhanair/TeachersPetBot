@@ -11,9 +11,9 @@ def connect():
         print(f"The error '{e}' occurred when trying to connect to SQLite database")
 
 
-def select_query(sql):
+def select_query(sql, args=()):
     cur = con.cursor()
-    return cur.execute(sql)
+    return cur.execute(sql, args)
 
 
 def mutation_query(sql, args=()):
