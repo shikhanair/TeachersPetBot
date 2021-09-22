@@ -1,5 +1,5 @@
 # Office hours related features
-from datetime import datetime, time, timedelta
+from datetime import datetime, time
 import discord
 from discord.ext import tasks
 
@@ -43,12 +43,6 @@ class OfficeHourQueue:
         self.prev_queue_message = await self.text_channel.send(queue_str)
 
 # office_hour_queues = {}
-
-def get_office_hour_times(calendar):
-    # TODO
-    return (datetime.datetime(2021, 11, 11, 5, 12, 10), datetime.datetime(2021, 11, 11, 5, 12, 10))
-
-    # .send(queue_str)
 
 # TODO ensure startup script creates instructor role
 
@@ -193,6 +187,10 @@ async def check_office_hour_loop():
                     await close_oh(guild, office_hour.ta)
 
 
+def add_office_hour(guild, ta_office_hour):
+    all_guilds_ta_office_hours[guild.id].append(ta_office_hour)
+
+
 def init(b):
     global bot
     global all_guilds_ta_office_hours
@@ -203,8 +201,9 @@ def init(b):
     bot = b
     for guild in bot.guilds:
         ta_office_hours = [
-            TaOfficeHour(x.ta, x.day, (time(hour=x.begin_hr, minute=x.begin_min), time(hour=x.end_hr, minute=x.end_min)))
-            for x in db.select_query('SELECT * FROM ta_office_hours WHERE guild_id = ?', [guild.id])
+            TaOfficeHour(ta, day, (time(hour=begin_hr, minute=begin_min), time(hour=end_hr, minute=end_min)))
+            for ta, day, begin_hr, begin_min, end_hr, end_min
+            in db.select_query('SELECT ta, day, begin_hr, begin_min, end_hr, end_min FROM ta_office_hours WHERE guild_id = ?', [guild.id])
         ]
 
         all_guilds_ta_office_hours[guild.id] = ta_office_hours
