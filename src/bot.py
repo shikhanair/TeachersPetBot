@@ -61,16 +61,24 @@ async def test(ctx):
 async def office_hour_command(ctx, command, *args):
     await office_hours.office_hour_command(ctx, command, *args)
 
+
 @bot.command('ask')
-async def ask_question():
+async def ask_question(ctx, question):
     # make sure to check that this is actually being asked in the Q&A channel
-    # qna.ask(args)
-    pass
+    if ctx.channel.name == 'q-and-a':
+        await qna.question(ctx, question)
+    else:
+        await ctx.author.send('Please send questions to the #q-and-a channel.')
+        await ctx.message.delete()
+
 
 @bot.command('answer')
-async def answer_question():
+async def answer_question(ctx, q_num, answer):
     # make sure to check that this is actually being asked in the Q&A channel
-    # qna.answer(args)
-    pass
+    if ctx.channel.name == 'q-and-a':
+        await qna.answer(ctx, q_num, answer)
+    else:
+        await ctx.author.send('Please send answers to the #q-and-a channel.')
+        await ctx.message.delete()
 
 bot.run(TOKEN)
