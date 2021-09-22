@@ -7,6 +7,36 @@ import db
 
 bot = None
 
+async def get_times(ctx, event_type, command_invoker):
+    await ctx.send(
+        f'Which times would you like the {event_type} to be on?\n'
+        'Enter in format `<begin_time>-<end_time>`, and times should be in 24-hour format.\n'
+        f'For example, setting {event_type} from 9:30am to 1pm can be done as 9:30-13'
+    )
+
+    msg = await bot.wait_for('message', check=lambda m: m.author == command_invoker)
+
+    times = msg.content.split('-')
+    if len(times) != 2:
+        await ctx.send('Incorrect input. Aborting')
+        return
+
+    new_times = []
+    for t in times:
+        parts = t.split(':')
+        if len(parts) == 1:
+            new_time = (int(parts[0]), 0)
+        elif len(parts) == 2:
+            new_time = (int(parts[0]), int(parts[1]))
+        new_times.append(new_time)
+    
+    if len(new_times) != 2:
+        await ctx.send('Incorrect input. Aborting')
+        return
+    
+    return new_times
+
+
 async def create_event(ctx):
     command_invoker = ctx.author
 
@@ -23,6 +53,41 @@ async def create_event(ctx):
         interaction = await bot.wait_for('button_click')
         if interaction.custom_id == 'assignment':
             await ctx.send('What would you like the assignment to be called')
+        if interaction.custom_id == 'exam':
+            await ctx.send('What is the title of this exam?')
+            msg = await bot.wait_for('message', check=lambda m: m.author == command_invoker)
+            title = msg.content
+
+            await ctx.send('What content is this exam covering?')
+            msg = await bot.wait_for('message', check=lambda m: m.author == command_invoker)
+            description = msg.content
+
+            await ctx.send('What is the date of this exam?\nEnter in format `MMDDYYYY`')
+            msg = await bot.wait_for('message', check=lambda m: m.author == command_invoker)
+            date = msg.content
+
+            is_valid = len(date) == 8
+            try:
+                datetime.datetime.strptime(date, '%M%D%Y')
+            except ValueError:
+                is_valid = False
+
+            if not is_valid:
+                await ctx.send('Invalid date. Aborting.')
+                return
+
+            times = await get_times(ctx, 'exam', command_invoker)
+            if not times:
+                return
+
+            ((begin_hour, begin_minute), (end_hour, end_minute)) = times
+
+            db.mutation_query(
+                'INSERT INTO exams VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                [ctx.guild.id, title, description, date, begin_hour, begin_minute, end_hour, end_minute]
+            )
+
+            await ctx.send('Exam successfully created!')
         if interaction.custom_id == 'office-hour':
             all_instructors = []
             for mem in ctx.guild.members:
@@ -50,7 +115,7 @@ async def create_event(ctx):
             instructor = instr_select_interaction.values[0]
 
             await ctx.send(
-                'Which day would you like the office hour to be on',
+                'Which day would you like the office hour to be on?',
                 components=[
                     Select(
                         placeholder='Select a day',
@@ -71,33 +136,11 @@ async def create_event(ctx):
             day = day_interaction.values[0]
             day_num = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').index(day)
 
-            await ctx.send(
-                'Which times would you like the office hour to be on\n'
-                'Enter in format `<begin_time>-<end_time>`, and times should be in 24-hour format.\n'
-                'For example, setting office hour from 9:30am to 1pm can be done as 9:30-13'
-            )
-
-            msg = await bot.wait_for('message', check=lambda m: m.author == command_invoker)
-
-            times = msg.content.split('-')
-            if len(times) != 2:
-                await ctx.send('Incorrect input. Aborting')
+            times = await get_times(ctx, 'office hour', command_invoker)
+            if not times:
                 return
 
-            new_times = []
-            for t in times:
-                parts = t.split(':')
-                if len(parts) == 1:
-                    new_time = (int(parts[0]), 0)
-                elif len(parts) == 2:
-                    new_time = (int(parts[0]), int(parts[1]))
-                new_times.append(new_time)
-            
-            if len(new_times) != 2:
-                await ctx.send('Incorrect input. Aborting')
-                return
-
-            ((begin_hour, begin_minute), (end_hour, end_minute)) = new_times
+            ((begin_hour, begin_minute), (end_hour, end_minute)) = times
 
             # begin_time = datetime.time(hour=begin_hour, minute=begin_minute)
             # end_time = datetime.time(hour=end_hour, minute=end_minute)
@@ -106,6 +149,8 @@ async def create_event(ctx):
                 'INSERT INTO ta_office_hours VALUES (?, ?, ?, ?, ?, ?, ?)',
                 [ctx.guild.id, instructor, day_num, begin_hour, begin_minute, end_hour, end_minute]
             )
+
+            await ctx.send('Office hour successfully created!')
 
     else:
         await ctx.author.send('`!create` can only be used in the `instructor-commands` channel')
