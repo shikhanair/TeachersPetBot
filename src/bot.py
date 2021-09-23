@@ -4,7 +4,6 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 import init_server
-import group_finding
 import cal
 import office_hours
 import profanity
@@ -22,6 +21,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents=discord.Intents.default()
 bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
 intents.members = True
+
 
 @bot.event
 async def on_ready():
@@ -49,17 +49,23 @@ async def on_message(message):
         await message.channel.send(response)
 
 
-'''
-NOTE: bot commands don't work if client methods or bot on_message is implemented
-'''
+@bot.event
+async def on_message_edit(before, after):
+    if profanity.check_profanity(after.content):
+        await after.channel.send(after.author.name + ' says: ' + profanity.censor_profanity(after.content))
+        await after.delete()
+
+
 @bot.command()
 async def test(ctx):
     await ctx.send('test successful')
+
 
 # office hour commands
 @bot.command(name='oh', help='Operations relevant for office hours.')
 async def office_hour_command(ctx, command, *args):
     await office_hours.office_hour_command(ctx, command, *args)
+
 
 
 @bot.command('ask')
@@ -70,6 +76,7 @@ async def ask_question(ctx, question):
     else:
         await ctx.author.send('Please send questions to the #q-and-a channel.')
         await ctx.message.delete()
+
 
 
 @bot.command('answer')

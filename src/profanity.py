@@ -1,9 +1,10 @@
-from profanity_filter import ProfanityFilter
-pf = ProfanityFilter()
+from better_profanity import profanity
+profanity.load_censor_words()
+
 
 def check_profanity(msg):
-    return(pf.is_profane(msg))
+    return(profanity.contains_profanity(msg))
+
 
 def censor_profanity(msg):
-    pf.censor_char = '*'
-    return pf.censor(msg)
+    return profanity.censor(msg)
