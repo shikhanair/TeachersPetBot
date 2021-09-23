@@ -1,5 +1,4 @@
 discord.py==1.7.3
-profanity-filter==1.3.3
+better_profanity==0.7.0
 numpy==1.21.2
-spacy==2.3.7
 validators==0.18.2
