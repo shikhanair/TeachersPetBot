@@ -2,8 +2,10 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+from discord_components import DiscordComponents, Button, ButtonStyle
 
 import init_server
+import event_creation
 import cal
 import office_hours
 import profanity
@@ -19,19 +21,20 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 #GUILD = 'TeachersPet-Dev'
 
 intents=discord.Intents.default()
-bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
 intents.members = True
+bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
 
 
 @bot.event
 async def on_ready():
+    DiscordComponents(bot)
+    db.connect()
+    event_creation.init(bot)
+    office_hours.init(bot)
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    db.connect()
-    office_hours.init(bot)
-
 
 @bot.event
 async def on_message(message):
@@ -60,6 +63,11 @@ async def on_message_edit(before, after):
 async def test(ctx):
     await ctx.send('test successful')
 
+@bot.command(name='create', help='Create a new event.')
+# @commands.dm_only()
+@commands.has_role('Instructor')
+async def create_event(ctx):
+    await event_creation.create_event(ctx)
 
 # office hour commands
 @bot.command(name='oh', help='Operations relevant for office hours.')

@@ -1,7 +1,9 @@
 # Office hours related features
-from datetime import datetime, timedelta
+from datetime import datetime, time
 import discord
 from discord.ext import tasks
+
+import db
 
 class Group:
     def __init__(self, student, group_id):
@@ -40,13 +42,7 @@ class OfficeHourQueue:
         )
         self.prev_queue_message = await self.text_channel.send(queue_str)
 
-office_hour_queues = {}
-
-def get_office_hour_times(calendar):
-    # TODO
-    return (datetime.datetime(2021, 11, 11, 5, 12, 10), datetime.datetime(2021, 11, 11, 5, 12, 10))
-
-    # .send(queue_str)
+# office_hour_queues = {}
 
 # TODO ensure startup script creates instructor role
 
@@ -109,10 +105,11 @@ async def office_hour_command(ctx, command, *args):
             for member in next_group.group_members:
                 await voice_channel.set_permissions(member, read_messages=True, send_messages=True)
                 await waiting_room.set_permissions(member, overwrite=None)
-                await member.move_to(voice_channel)
+                # await member.move_to(voice_channel)
 
                 message = f"{office_hour_queue.ta_name} is ready to help {'you' if len(next_group.group_members) == 1 else 'your group'}. Please join the office hour voice channel."
                 await member.send(message)
+            await office_hour_queue.display_queue()
     else:
         await ctx.author.send('The `!oh` command is only valid in office hour text channels.')
 
@@ -130,8 +127,8 @@ async def open_oh(guild, ta):
 
     ta_name_channelified = ta.lower().replace(" ", "-")
     text_channel = await category.create_text_channel(f'office-hour-{ta_name_channelified}')
-    voice_channel = await category.create_voice_channel(f'office-hour-{ta_name_channelified}')#, overwrites=overwrites)
-    waiting_room = await category.create_voice_channel(f'office-hour-{ta_name_channelified}-waiting-list')#, overwrites=overwrites)
+    voice_channel = await category.create_voice_channel(f'office-hour-{ta_name_channelified}', overwrites=overwrites)
+    waiting_room = await category.create_voice_channel(f'office-hour-{ta_name_channelified}-waiting-list', overwrites=overwrites)
 
     await text_channel.send(
         f"Welcome to {ta}'s office hour!\n"
@@ -162,37 +159,53 @@ async def close_oh(guild, ta):
 
 
 class TaOfficeHour:
-    def __init__(self, ta, times):
+    def __init__(self, ta, day, times):
         self.ta = ta
+        self.day = day
         self.times = times
 
 
-bot = None
-all_guilds_ta_office_hours = {}
+# bot = None
+# all_guilds_ta_office_hours = {}
 
 
 @tasks.loop(seconds=5)
 async def check_office_hour_loop():
-    curr_time = datetime.now().time()
+    curr_datetime = datetime.now()
+    curr_day = curr_datetime.weekday()
+    curr_time = curr_datetime.time()
     for guild in bot.guilds:
         ta_office_hours = all_guilds_ta_office_hours[guild.id]
         for office_hour in ta_office_hours:
-            begin_time, end_time = office_hour.times
-            ta_name_channelified = office_hour.ta.lower().replace(" ", "-")
-            if begin_time <= curr_time <= end_time and ta_name_channelified not in office_hour_queues:
-                await open_oh(guild, office_hour.ta)
-            elif curr_time > end_time and ta_name_channelified in office_hour_queues:
-                await close_oh(guild, office_hour.ta)
+            day = office_hour.day
+            if curr_day == day:
+                begin_time, end_time = office_hour.times
+                ta_name_channelified = office_hour.ta.lower().replace(" ", "-")
+                if begin_time <= curr_time <= end_time and ta_name_channelified not in office_hour_queues:
+                    await open_oh(guild, office_hour.ta)
+                elif curr_time > end_time and ta_name_channelified in office_hour_queues:
+                    await close_oh(guild, office_hour.ta)
+
+
+def add_office_hour(guild, ta_office_hour):
+    all_guilds_ta_office_hours[guild.id].append(ta_office_hour)
 
 
 def init(b):
     global bot
     global all_guilds_ta_office_hours
+    global office_hour_queues
+
+    office_hour_queues = {}
+    all_guilds_ta_office_hours = {}
     bot = b
     for guild in bot.guilds:
         ta_office_hours = [
-            TaOfficeHour('Alex', ((datetime.now() + timedelta(seconds=5)).time(), (datetime.now() + timedelta(minutes=20)).time()))
+            TaOfficeHour(ta, day, (time(hour=begin_hr, minute=begin_min), time(hour=end_hr, minute=end_min)))
+            for ta, day, begin_hr, begin_min, end_hr, end_min
+            in db.select_query('SELECT ta, day, begin_hr, begin_min, end_hr, end_min FROM ta_office_hours WHERE guild_id = ?', [guild.id])
         ]
+
         all_guilds_ta_office_hours[guild.id] = ta_office_hours
 
     check_office_hour_loop.start()
