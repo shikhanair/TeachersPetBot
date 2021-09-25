@@ -5,12 +5,13 @@ from dotenv import load_dotenv
 from discord_components import DiscordComponents, Button, ButtonStyle
 
 import init_server
-import group_finding
+import event_creation
 import cal
 import office_hours
 import profanity
 import qna
 import logging
+import db
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,20 +19,22 @@ logging.basicConfig(level=logging.INFO)
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 #GUILD = 'TeachersPet-Dev'
-client = discord.Client()
 
 intents=discord.Intents.default()
-bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
 intents.members = True
+bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
+
 
 @bot.event
 async def on_ready():
     DiscordComponents(bot)
+    db.connect()
+    event_creation.init(bot)
+    office_hours.init(bot)
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-
 
 @bot.event
 async def on_message(message):
@@ -48,37 +51,48 @@ async def on_message(message):
         response = 'hey yourself'
         await message.channel.send(response)
 
-'''
-NOTE: bot commands don't work if client methods or bot on_message is implemented
-'''
+@bot.event
+async def on_message_edit(before, after):
+    if profanity.check_profanity(after.content):
+        await after.channel.send(after.author.name + ' says: ' + profanity.censor_profanity(after.content))
+        await after.delete()
+
+
 @bot.command()
 async def test(ctx):
     await ctx.send('test successful')
 
-@bot.command('button')
-async def button_command(ctx):
-    await ctx.send("Content", components=[Button(style=ButtonStyle.blue, label="Blue"), Button(style=ButtonStyle.red, label="Red"), Button(style=ButtonStyle.URL, label="url", url="https://example.org")])
-    while True:
-        res = await bot.wait_for("button_click")
-        await res.send(content=f'{res.component.label} clicked')
+@bot.command(name='create', help='Create a new event.')
+# @commands.dm_only()
+@commands.has_role('Instructor')
+async def create_event(ctx):
+    await event_creation.create_event(ctx)
 
 # office hour commands
-@bot.command('oh')
-@commands.has_role('admin')
-async def office_hour_command():
-    # office_hours.office_hour_command(args)
-    pass
+@bot.command(name='oh', help='Operations relevant for office hours.')
+async def office_hour_command(ctx, command, *args):
+    await office_hours.office_hour_command(ctx, command, *args)
+
+
 
 @bot.command('ask')
-async def ask_question():
+async def ask_question(ctx, question):
     # make sure to check that this is actually being asked in the Q&A channel
-    # qna.ask(args)
-    pass
+    if ctx.channel.name == 'q-and-a':
+        await qna.question(ctx, question)
+    else:
+        await ctx.author.send('Please send questions to the #q-and-a channel.')
+        await ctx.message.delete()
+
+
 
 @bot.command('answer')
-async def answer_question():
+async def answer_question(ctx, q_num, answer):
     # make sure to check that this is actually being asked in the Q&A channel
-    # qna.answer(args)
-    pass
+    if ctx.channel.name == 'q-and-a':
+        await qna.answer(ctx, q_num, answer)
+    else:
+        await ctx.author.send('Please send answers to the #q-and-a channel.')
+        await ctx.message.delete()
 
 bot.run(TOKEN)
