@@ -13,14 +13,14 @@ but nevertheless, here is a track record that everyone is contributing a lot)|
 |Docs: why: docs tell a story, motivate the whole thing, deliver a punchline that makes you want to rush out and use the thing|
 |Docs: short video, animated, hosted on your repo. That convinces people why they want to work on your code.|
 | Use of version control tools|
-|Use of  style checkers |
-| Use of code  formatters. |
-| Use of syntax checkers. |
+|Use of  style checkers ||[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
+| Use of code  formatters. ||[black configuration](https://github.com/shikhanair/TeachersPetBot/blob/main/pyproject.toml)|
+| Use of syntax checkers. ||[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
 | Use of code coverage |
 | other automated analysis tools|
-| test cases exist|
-| test cases are routinely executed|
- | the files CONTRIBUTING.md lists coding standards and lots of tips on how to extend the system without screwing things up|
+| test cases exist||[test directory](https://github.com/shikhanair/TeachersPetBot/tree/main/test)|
+| test cases are routinely executed||[GH Action](https://github.com/shikhanair/TeachersPetBot/blob/main/.github/workflows/test.yml)|
+ | the files CONTRIBUTING.md lists coding standards and lots of tips on how to extend the system without screwing things up||[CONTRIBUTING.md](https://github.com/shikhanair/TeachersPetBot/blob/main/CONTRIBUTING.md)|
 | issues are discussed before they are closed|
 | Chat channel: exists|
 | test cases:.a large proportion of the issues related to handling failing cases.|
