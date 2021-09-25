@@ -38,6 +38,12 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
+
+    # allow messages from test bot
+    if message.author.bot and message.author.id == 889697640411955251:
+        ctx = await bot.get_context(message)
+        await bot.invoke(ctx)
+
     if message.author == bot.user:
         return
 
