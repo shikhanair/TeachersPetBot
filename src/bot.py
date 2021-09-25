@@ -51,7 +51,6 @@ async def on_message(message):
         response = 'hey yourself'
         await message.channel.send(response)
 
-
 @bot.event
 async def on_message_edit(before, after):
     if profanity.check_profanity(after.content):
