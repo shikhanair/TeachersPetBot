@@ -31,6 +31,7 @@ async def on_ready():
     db.connect()
     event_creation.init(bot)
     office_hours.init(bot)
+    cal.init(bot)
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
@@ -61,6 +62,10 @@ async def on_message_edit(before, after):
 @bot.command()
 async def test(ctx):
     await ctx.send('test successful')
+
+@bot.command(name='events', help='Display All Events')
+async def display_calendar(ctx):
+    await cal.display_events(ctx)
 
 @bot.command(name='create', help='Create a new event.')
 # @commands.dm_only()
