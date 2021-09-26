@@ -24,14 +24,13 @@ intents=discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
 
-
 @bot.event
 async def on_ready():
     DiscordComponents(bot)
     db.connect()
     event_creation.init(bot)
     office_hours.init(bot)
-    cal.init(bot)
+    await cal.init(bot)
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
@@ -51,6 +50,12 @@ async def on_message(message):
     if message.content == 'hey bot':
         response = 'hey yourself ;)'
         await message.channel.send(response)
+        
+      
+#@bot.command()
+#async def calendar(ctx):
+ #   guild=ctx.guild
+  #  channel = await guild.create_text_channel('course-calendar')
 
 @bot.event
 async def on_message_edit(before, after):
@@ -88,23 +93,6 @@ async def ask_question(ctx, question):
     else:
         await ctx.author.send('Please send questions to the #q-and-a channel.')
         await ctx.message.delete()
-
-#`````````````````````````````````````````````````````````````````````````````
-#calendar commands
-@bot.command('calendar')
-async def calendar(ctx):
-    if ctx.channel.name == 'calendar':
-        await ctx.send("Here\'s what it\'s going to look like, sire", components=[Button(label="Click to View", custom_id="button1")])
-        interaction = await bot.wait_for("button_click", check=lambda inter: inter.custom_id == "button1")
-        await interaction.send(content="C A L E N D A R")
-    else:
-        await ctx.author.send('Please use the #calendar channel!')
-        await ctx.message.delete()
-
-
-
-
-#`````````````````````````````````````````````````````````````````````````````
 
 
 @bot.command('answer')

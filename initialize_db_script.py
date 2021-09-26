@@ -44,10 +44,10 @@ c.execute(SQL_STATEMENT)
 
 SQL_STATEMENT = """INSERT INTO assignments VALUES(
     1,
-    "test1",
-    "test.html",
-    "test desc",
-    "09/25/2021",
+    "assign1",
+    "assign1.html",
+    "assign1 desc",
+    "09-25-2021",
     18,
     30
 );"""
@@ -56,11 +56,23 @@ c.execute(SQL_STATEMENT)
 
 SQL_STATEMENT = """INSERT INTO assignments VALUES(
     1,
-    "test2",
-    "test2.html",
-    "test2 desc",
-    "09/26/2021",
+    "assign3",
+    "assign3.html",
+    "assign3 desc",
+    "09-26-2021",
     18,
+    30
+);"""
+
+c.execute(SQL_STATEMENT)
+
+SQL_STATEMENT = """INSERT INTO assignments VALUES(
+    1,
+    "assign2",
+    "assign2.html",
+    "assign2 desc",
+    "09-26-2021",
+    15,
     30
 );"""
 
@@ -68,9 +80,9 @@ c.execute(SQL_STATEMENT)
 
 SQL_STATEMENT = """INSERT INTO exams VALUES(
     1,
-    "test1",
-    "test desc",
-    "09/27/2021",
+    "test2",
+    "test2 desc",
+    "09-27-2021",
     16,
     30,
     18,
@@ -81,10 +93,23 @@ c.execute(SQL_STATEMENT)
 
 SQL_STATEMENT = """INSERT INTO exams VALUES(
     1,
-    "test2",
-    "test2 desc",
-    "09/28/2021",
+    "test3",
+    "test3 desc",
+    "09-28-2021",
     16,
+    30,
+    18,
+    30
+);"""
+
+c.execute(SQL_STATEMENT)
+
+SQL_STATEMENT = """INSERT INTO exams VALUES(
+    1,
+    "test1",
+    "test1 desc",
+    "09-26-2021",
+    14,
     30,
     18,
     30

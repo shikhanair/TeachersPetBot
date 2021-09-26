@@ -6,20 +6,16 @@ from discord.ext import tasks
 
 bot = None
 calendar_embed = None
-
-@tasks.loop(seconds=5)
-async def display(msg):
-    timeNow = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    calendar_embed.set_footer(text=f"Updated: {timeNow}")
-    await msg.edit(embed=calendar_embed)
-
+msg = None 
 
 async def display_events(ctx):
+    global msg
     update_calendar()
     
-    msg = await ctx.send(embed=calendar_embed)
-    
-    display.start(msg)
+    if not msg:
+        msg = await ctx.send(embed=calendar_embed)
+    else:
+        await msg.edit(embed=calendar_embed)
 
 def update_calendar():
     global calendar_embed
@@ -74,9 +70,27 @@ def update_calendar():
     calendar_embed.add_field(name="Events", value=events, inline=False)
     
     timeNow = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    calendar_embed.set_footer(text=f"Created: {timeNow}")
+    calendar_embed.set_footer(text=f"{timeNow}")
+    
+    
 
-def init(b):
+async def init(b):
     global bot
     
     bot = b
+    for guild in bot.guilds:
+        flag = False
+        for channel in guild.text_channels:
+            if(channel.name == 'course-calendar'):
+                flag = True
+        
+        if(flag == False):
+            channel = await guild.create_text_channel('course-calendar')
+        
+            channel_id = channel.id
+            
+            intro_message = bot.get_channel(channel_id)
+            await channel.send("The Course Calendar, sire")  
+            await display_events(channel)
+    
+    
