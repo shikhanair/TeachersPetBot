@@ -4,3 +4,4 @@ better_profanity==0.7.0
 numpy==1.21.2
 validators==0.18.2
 discord-components
+coverage
