@@ -48,7 +48,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
     if message.content == 'hey bot':
-        response = 'hey yourself'
+        response = 'hey yourself ;)'
         await message.channel.send(response)
 
 @bot.event
@@ -84,6 +84,22 @@ async def ask_question(ctx, question):
         await ctx.author.send('Please send questions to the #q-and-a channel.')
         await ctx.message.delete()
 
+#`````````````````````````````````````````````````````````````````````````````
+#calendar commands
+@bot.command('calendar')
+async def calendar(ctx):
+    if ctx.channel.name == 'calendar':
+        await ctx.send("Here\'s what it\'s going to look like, sire", components=[Button(label="Click to View", custom_id="button1")])
+        interaction = await bot.wait_for("button_click", check=lambda inter: inter.custom_id == "button1")
+        await interaction.send(content="C A L E N D A R")
+    else:
+        await ctx.author.send('Please use the #calendar channel!')
+        await ctx.message.delete()
+
+
+
+
+#`````````````````````````````````````````````````````````````````````````````
 
 
 @bot.command('answer')
