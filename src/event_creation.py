@@ -4,6 +4,7 @@ from discord_components import Button, ButtonStyle, Select, SelectOption
 import datetime
 import validators
 import office_hours
+import cal
 
 import db
 
@@ -105,6 +106,7 @@ async def create_event(ctx):
             # TODO add assignment to events list
 
             await ctx.send('Assignment successfully created!')
+            await cal.display_events(None)
         elif interaction.custom_id == 'exam':
             await ctx.send('What is the title of this exam?')
             msg = await bot.wait_for('message', check=lambda m: m.author == command_invoker)
@@ -142,6 +144,7 @@ async def create_event(ctx):
             # TODO add exam to events list
 
             await ctx.send('Exam successfully created!')
+            await cal.display_events(None)
         elif interaction.custom_id == 'office-hour':
             all_instructors = []
             for mem in ctx.guild.members:

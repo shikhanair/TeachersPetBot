@@ -24,13 +24,13 @@ intents=discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
 
-
 @bot.event
 async def on_ready():
     DiscordComponents(bot)
     db.connect()
     event_creation.init(bot)
     office_hours.init(bot)
+    await cal.init(bot)
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
@@ -48,7 +48,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
     if message.content == 'hey bot':
-        response = 'hey yourself'
+        response = 'hey yourself ;)'
         await message.channel.send(response)
 
 @bot.event
@@ -73,8 +73,6 @@ async def create_event(ctx):
 async def office_hour_command(ctx, command, *args):
     await office_hours.office_hour_command(ctx, command, *args)
 
-
-
 @bot.command('ask')
 async def ask_question(ctx, question):
     # make sure to check that this is actually being asked in the Q&A channel
@@ -83,7 +81,6 @@ async def ask_question(ctx, question):
     else:
         await ctx.author.send('Please send questions to the #q-and-a channel.')
         await ctx.message.delete()
-
 
 
 @bot.command('answer')
