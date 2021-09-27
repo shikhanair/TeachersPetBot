@@ -12,7 +12,7 @@ CREATE TABLE exams (
     guild_id    INT,
     title       VARCHAR(50),
     desc        VARCHAR(300),
-    date        VARCHAR(8),
+    date        VARCHAR(10),
     begin_hr    INT,
     begin_min   INT,
     end_hr      INT,
@@ -24,7 +24,7 @@ CREATE TABLE assignments (
     title       VARCHAR(50),
     link        VARCHAR(300),
     desc        VARCHAR(300),
-    date        VARCHAR(8),
+    date        VARCHAR(10),
     due_hr      INT,
     due_min     INT
 );
