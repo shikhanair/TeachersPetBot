@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import os
 import discord
 from discord.ext import commands
@@ -38,7 +39,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-
+    
     # allow messages from test bot
     if message.author.bot and message.author.id == 889697640411955251:
         ctx = await bot.get_context(message)
@@ -102,4 +103,36 @@ async def answer_question(ctx, q_num, answer):
         await ctx.author.send('Please send answers to the #q-and-a channel.')
         await ctx.message.delete()
 
-bot.run(TOKEN)
+
+@bot.command('begin-tests')
+async def begin_tests(ctx):
+    if ctx.author.id != 889697640411955251:
+        return
+    
+    test_oh_chan = next((ch for ch in ctx.guild.text_channels if 'office-hour-test' in ch.name), None)
+    if test_oh_chan:
+        assert False    
+
+    test_oh = office_hours.TaOfficeHour(
+        'test',
+        datetime.now().weekday(),
+        (datetime.now().time(), (datetime.now() - timedelta(0, 1, 0)).time())
+    )
+    await office_hours.open_oh(ctx.guild, 'test')
+
+
+@bot.command('end-tests')
+async def end_tests(ctx):
+    if ctx.author.id != 889697640411955251:
+        return
+
+    await office_hours.close_oh(ctx.guild, 'test')
+    
+    quit(0)
+
+
+if __name__ == '__main__':
+    bot.run(TOKEN)
+
+def test_dummy():
+    bot.run(TOKEN)

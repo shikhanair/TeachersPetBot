@@ -63,7 +63,7 @@ async def create_event(ctx):
             link = msg.content.strip() if msg.content.strip() != 'N/A' else None
 
             if link and not validators.url(link):
-                await ctx.send('Invalid date. Aborting.')
+                await ctx.send('Invalid URL. Aborting.')
                 return
 
             await ctx.send('Extra description for assignment? Type N/A if none')
