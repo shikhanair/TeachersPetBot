@@ -38,6 +38,8 @@ async def question(ctx, q):
 async def answer(ctx, num, ans):
     global qna
 
+    print('context: \n', ctx)
+
     # check if question number exists
     if int(num) not in qna.keys():
         await ctx.author.send('Invalid question number: ' + str(num))

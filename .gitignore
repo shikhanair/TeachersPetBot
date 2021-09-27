@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 .env
-db.sqlite
+*.sqlite
