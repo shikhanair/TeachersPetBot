@@ -39,7 +39,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(message):
-    
+
     # allow messages from test bot
     if message.author.bot and message.author.id == 889697640411955251:
         ctx = await bot.get_context(message)
@@ -111,13 +111,8 @@ async def begin_tests(ctx):
     
     test_oh_chan = next((ch for ch in ctx.guild.text_channels if 'office-hour-test' in ch.name), None)
     if test_oh_chan:
-        assert False    
+        quit(1)
 
-    test_oh = office_hours.TaOfficeHour(
-        'test',
-        datetime.now().weekday(),
-        (datetime.now().time(), (datetime.now() - timedelta(0, 1, 0)).time())
-    )
     await office_hours.open_oh(ctx.guild, 'test')
 
 
