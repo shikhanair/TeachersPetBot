@@ -14,9 +14,9 @@ Total Points from Self-Assessment:
 |Docs: why: docs tell a story, motivate the whole thing, deliver a punchline that makes you want to rush out and use the thing|
 |Docs: short video, animated, hosted on your repo. That convinces people why they want to work on your code.|
 | Use of version control tools|3 |
-|Use of  style checkers ||[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
-| Use of code  formatters. ||[black configuration](https://github.com/shikhanair/TeachersPetBot/blob/main/pyproject.toml)|
-| Use of syntax checkers. ||[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
+|Use of  style checkers |3 |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
+| Use of code  formatters. |3 |[black configuration](https://github.com/shikhanair/TeachersPetBot/blob/main/pyproject.toml)|
+| Use of syntax checkers. |3 |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
 | Use of code coverage |
 | other automated analysis tools|
 | test cases exist||[test directory](https://github.com/shikhanair/TeachersPetBot/tree/main/test)|
