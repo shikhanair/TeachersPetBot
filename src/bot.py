@@ -50,12 +50,6 @@ async def on_message(message):
     if message.content == 'hey bot':
         response = 'hey yourself ;)'
         await message.channel.send(response)
-        
-      
-#@bot.command()
-#async def calendar(ctx):
- #   guild=ctx.guild
-  #  channel = await guild.create_text_channel('course-calendar')
 
 @bot.event
 async def on_message_edit(before, after):
@@ -68,10 +62,6 @@ async def on_message_edit(before, after):
 async def test(ctx):
     await ctx.send('test successful')
 
-@bot.command(name='events', help='Display All Events')
-async def display_calendar(ctx):
-    await cal.display_events(ctx)
-
 @bot.command(name='create', help='Create a new event.')
 # @commands.dm_only()
 @commands.has_role('Instructor')
@@ -82,8 +72,6 @@ async def create_event(ctx):
 @bot.command(name='oh', help='Operations relevant for office hours.')
 async def office_hour_command(ctx, command, *args):
     await office_hours.office_hour_command(ctx, command, *args)
-
-
 
 @bot.command('ask')
 async def ask_question(ctx, question):
