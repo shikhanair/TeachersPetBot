@@ -37,7 +37,6 @@ async def begin_tests():
     await testing_bot.get_guild(TEST_GUILD_ID).text_channels[0].send('!begin-tests')
 
 async def end_tests():
-    # TODO maybe move the logic in here
     await testing_bot.get_guild(TEST_GUILD_ID).text_channels[0].send('!end-tests')
 
 if __name__ == '__main__':

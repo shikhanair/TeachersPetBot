@@ -1,3 +1,6 @@
+###########################
+# Tests Event creation functionality
+###########################
 import discord
 from utils import wait_for_msg
 

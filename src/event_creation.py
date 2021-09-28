@@ -1,3 +1,6 @@
+###########################
+# Functionality for creating new events
+###########################
 from os import times
 from discord.ext.commands.core import check
 from discord_components import Button, ButtonStyle, Select, SelectOption
@@ -9,6 +12,15 @@ import db
 
 bot = None
 
+###########################
+# Function: get_times
+# Description: helper function for acquiring the times an instructor wants an event to be held during
+# Inputs:
+#      - ctx: context of this discord message
+#      - event_type: type of event which times are being asked for
+#      - command_invoker: discord user who is creating event
+# Outputs: the begin and end times for the event
+###########################
 async def get_times(ctx, event_type, command_invoker):
     await ctx.send(
         f'Which times would you like the {event_type} to be on?\n'
@@ -39,6 +51,14 @@ async def get_times(ctx, event_type, command_invoker):
     return new_times
 
 
+###########################
+# Function: create_event
+# Description: creates an event by the specifications of the instructor creating the event
+# Inputs:
+#      - ctx: context of this discord message
+#      - testing_mode: flag indicating whether this event is being created during a system test
+# Outputs: new event created in database
+###########################
 async def create_event(ctx, testing_mode):
     command_invoker = ctx.author
 
@@ -223,6 +243,13 @@ async def create_event(ctx, testing_mode):
         await ctx.message.delete()
 
         
+###########################
+# Function: init
+# Description: initializes this module, giving it access to discord bot
+# Inputs:
+#      - b: discord bot
+# Outputs: None
+###########################
 def init(b):
     global bot
     bot = b

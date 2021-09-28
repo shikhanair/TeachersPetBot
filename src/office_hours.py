@@ -1,15 +1,27 @@
-# Office hours related features
+###########################
+# Functionality related to administering office hours
+###########################
 from datetime import datetime, time
 import discord
 from discord.ext import tasks
 
 import db
 
+
+###########################
+# Class: Group
+# Description: contains information about an office hour group
+###########################
 class Group:
     def __init__(self, student, group_id):
         self.group_members = [student]
         self.group_id = group_id
 
+
+###########################
+# Class: OfficeHourQueue
+# Description: contains information about an office hour queue
+###########################
 class OfficeHourQueue:
     def __init__(self, ta_name, text_channel, voice_channel, waiting_room):
         self.current_student = None
@@ -21,10 +33,22 @@ class OfficeHourQueue:
         self.waiting_room = waiting_room
         self.next_grp_id = 0
     
+    ###########################
+    # Method: enqueue
+    # Description: adds a student to the office hour queue
+    # Inputs:
+    #      - student: student to add to the office hour queue
+    # Outputs: None
+    ###########################
     def enqueue(self, student):
         self.queue.append(Group(student, '{:03d}'.format(self.next_grp_id)))
         self.next_grp_id = (self.next_grp_id + 1) % 1000
 
+    ###########################
+    # Method: display_queue
+    # Description: displays the office hour queue in the office hour channel
+    # Outputs: office hour queue as a message in the office hour channel
+    ###########################
     async def display_queue(self):
         if self.prev_queue_message:
             await self.prev_queue_message.delete()
@@ -42,10 +66,15 @@ class OfficeHourQueue:
         )
         self.prev_queue_message = await self.text_channel.send(queue_str)
 
-# office_hour_queues = {}
 
-# TODO ensure startup script creates instructor role
-
+###########################
+# Function: office_hour_command
+# Description: handles a command given in an office hour channel
+# Inputs:
+#      - ctx: context of this discord message
+#      - command: office hour command given
+#      - args: extra arguments given to command
+###########################
 async def office_hour_command(ctx, command, *args):
     if ctx.channel.name[:len('office-hour-')] == 'office-hour-':
         ta = ctx.channel.name[len('office-hour-'):]
@@ -67,11 +96,6 @@ async def office_hour_command(ctx, command, *args):
                     group_id_to_join = args[0]
                     group_to_join = next((group for group in queue if group_id_to_join == group.group_id), None)
                     if group_to_join:
-                        # TODO maybe implement in future
-                        # for member in group_to_join.group_members:
-                        #     message = (f'{ctx.author.name} {f"(nickname: {ctx.author.nick})" if ctx.author.nick != ctx.author.name else ""} '
-                        #         'is attempting to join your office hour group. Replay with `!oh group accept` to accept or `!oh group reject` to reject this student.')
-                        #     await member.send(message)
                         group_to_join.group_members.append(ctx.author)
                         await office_hour_queue.display_queue()
                     else:
@@ -99,13 +123,11 @@ async def office_hour_command(ctx, command, *args):
 
             if office_hour_queue.current_student:
                 await voice_channel.set_permissions(office_hour_queue.current_student, overwrite=None)
-                # await waiting_room.set_permissions(office_hour_queue.current_student, overwrite=None)
 
             next_group = queue.pop(0)
             for member in next_group.group_members:
                 await voice_channel.set_permissions(member, read_messages=True, send_messages=True)
                 await waiting_room.set_permissions(member, overwrite=None)
-                # await member.move_to(voice_channel)
 
                 message = f"{office_hour_queue.ta_name} is ready to help {'you' if len(next_group.group_members) == 1 else 'your group'}. Please join the office hour voice channel."
                 await member.send(message)
@@ -116,6 +138,14 @@ async def office_hour_command(ctx, command, *args):
     await ctx.message.delete()
 
 
+###########################
+# Function: open_oh
+# Description: opens an office hour for students to get help from
+# Inputs:
+#      - guild: discord guild this office hour is relevant for
+#      - ta: name of TA who is holding this office hour
+# Outputs: creation of channels relevant to office hour
+###########################
 async def open_oh(guild, ta):
     category = await guild.create_category_channel(f'Office Hour {ta}')
 
@@ -142,6 +172,14 @@ async def open_oh(guild, ta):
     office_hour_queues[ta_name_channelified] = OfficeHourQueue(ta, text_channel, voice_channel, waiting_room)
 
 
+###########################
+# Function: close_oh
+# Description: closes an office hour session
+# Inputs:
+#      - guild: discord guild this office hour is relevant for
+#      - ta: name of TA who is holding this office hour
+# Outputs: deletion of channels relevant to office hour
+###########################
 async def close_oh(guild, ta):
     ta_name_channelified = ta.lower().replace(" ", "-")
     channels_to_delete = [
@@ -158,6 +196,10 @@ async def close_oh(guild, ta):
     office_hour_queues.pop(ta_name_channelified)
 
 
+###########################
+# Class: TaOfficeHour
+# Description: contains information about when an office hour is held
+###########################
 class TaOfficeHour:
     def __init__(self, ta, day, times):
         self.ta = ta
@@ -165,10 +207,10 @@ class TaOfficeHour:
         self.times = times
 
 
-# bot = None
-# all_guilds_ta_office_hours = {}
-
-
+###########################
+# Function: check_office_hour_loop
+# Description: function that runs intermittently to open or close office hours based on the current time
+###########################
 @tasks.loop(seconds=5)
 async def check_office_hour_loop():
     curr_datetime = datetime.now()
@@ -187,10 +229,24 @@ async def check_office_hour_loop():
                     await close_oh(guild, office_hour.ta)
 
 
+###########################
+# Function: add_office_hour
+# Description: adds a new TA office hour to the guild
+# Inputs:
+#      - guild: discord guild this office hour is relevant for
+#      - ta_office_hour: TA office hour information
+# Outputs: adds a new TA office hour to the system
+###########################
 def add_office_hour(guild, ta_office_hour):
     all_guilds_ta_office_hours[guild.id].append(ta_office_hour)
 
 
+###########################
+# Function: init
+# Description: initializes office hours module
+# Inputs:
+#      - b: discord bot
+###########################
 def init(b):
     global bot
     global all_guilds_ta_office_hours
