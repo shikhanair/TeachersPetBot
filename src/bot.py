@@ -99,18 +99,46 @@ async def setInstructor(ctx, member:discord.Member):
     await member.add_roles(irole, reason=None, atomic=True)
     await ctx.channel.send(member.name + " has been given Instructor role!")
 
+###########################
+# Function: create_event
+# Description: command to create event and send to event_creation module
+# Ensures command author is Instructor
+# Inputs:
+#      - ctx: context of the command
+# Outputs:
+#      - Options to create event
+###########################
 @bot.command(name='create', help='Create a new event.')
 # @commands.dm_only()
 @commands.has_role('Instructor')
 async def create_event(ctx):
     await event_creation.create_event(ctx)
 
-# office hour commands
+
+###########################
+# Function: oh
+# Description: command related office hour and send to office_hours module
+# Inputs:
+#      - ctx: context of the command
+#      - command: specific command to run
+#      - *args: arguments for command
+# Outputs:
+#      - Office hour details and options
+###########################
 @bot.command(name='oh', help='Operations relevant for office hours.')
 async def office_hour_command(ctx, command, *args):
     await office_hours.office_hour_command(ctx, command, *args)
 
-@bot.command('ask')
+###########################
+# Function: ask
+# Description: command to ask question and sends to qna module
+# Inputs:
+#      - ctx: context of the command
+#      - question: question text
+# Outputs:
+#      - User question in new post
+###########################
+@bot.command(name='ask', help='Ask question. Please put question text in quotes.')
 async def ask_question(ctx, question):
     # make sure to check that this is actually being asked in the Q&A channel
     if ctx.channel.name == 'q-and-a':
@@ -120,7 +148,17 @@ async def ask_question(ctx, question):
         await ctx.message.delete()
 
 
-@bot.command('answer')
+###########################
+# Function: answer
+# Description: command to answer question and sends to qna module
+# Inputs:
+#      - ctx: context of the command
+#      - q_num: question number to answer
+#      - answer: answer text
+# Outputs:
+#      - User answer in question post
+###########################
+@bot.command(name='answer', help='Answer specific question. Please put answer text in quotes.')
 async def answer_question(ctx, q_num, answer):
     # make sure to check that this is actually being asked in the Q&A channel
     if ctx.channel.name == 'q-and-a':
