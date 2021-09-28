@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 import test_office_hours
 import test_event_creation
+import test_qna
 
 load_dotenv()
 TOKEN = os.getenv('TESTING_BOT_TOKEN')
@@ -19,15 +20,17 @@ async def on_ready():
     exit_status = 0
     await begin_tests()
     try:
+        await test_qna.test(testing_bot, TEST_GUILD_ID)
         await test_office_hours.test(testing_bot, TEST_GUILD_ID)
         await test_event_creation.test(testing_bot, TEST_GUILD_ID)
     except Exception as ex:
-        print(ex)
+        print('exception: ', ex)
         exit_status = 1
     finally:
         await end_tests()
 
     await testing_bot.close()
+    print('exit_status: ', exit_status)
     assert exit_status == 0
 
 async def begin_tests():
