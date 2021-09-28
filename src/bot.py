@@ -28,8 +28,48 @@ bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', in
 
 @bot.event
 async def on_ready():
+    global testing_mode
+    testing_mode = False
+
     DiscordComponents(bot)
     db.connect()
+    db.mutation_query('''
+        CREATE TABLE IF NOT EXISTS ta_office_hours (
+            guild_id    INT,
+            ta          VARCHAR(50),
+            day         INT,
+            begin_hr    INT,
+            begin_min   INT,
+            end_hr      INT,
+            end_min     INT
+        )
+    ''')
+
+    db.mutation_query('''
+        CREATE TABLE IF NOT EXISTS exams (
+            guild_id    INT,
+            title       VARCHAR(50),
+            desc        VARCHAR(300),
+            date        VARCHAR(10),
+            begin_hr    INT,
+            begin_min   INT,
+            end_hr      INT,
+            end_min     INT
+        )
+    ''')
+
+    db.mutation_query('''
+        CREATE TABLE IF NOT EXISTS assignments (
+            guild_id    INT,
+            title       VARCHAR(50),
+            link        VARCHAR(300),
+            desc        VARCHAR(300),
+            date        VARCHAR(10),
+            due_hr      INT,
+            due_min     INT
+        )
+    ''')
+
     event_creation.init(bot)
     office_hours.init(bot)
     print('Logged in as')
@@ -74,7 +114,7 @@ async def test(ctx):
 # @commands.dm_only()
 @commands.has_role('Instructor')
 async def create_event(ctx):
-    await event_creation.create_event(ctx)
+    await event_creation.create_event(ctx, testing_mode)
 
 # office hour commands
 @bot.command(name='oh', help='Operations relevant for office hours.')
@@ -106,12 +146,16 @@ async def answer_question(ctx, q_num, answer):
 
 @bot.command('begin-tests')
 async def begin_tests(ctx):
+    global testing_mode
+
     if ctx.author.id != 889697640411955251:
         return
+
+    testing_mode = True
     
     test_oh_chan = next((ch for ch in ctx.guild.text_channels if 'office-hour-test' in ch.name), None)
     if test_oh_chan:
-        quit(1)
+        await office_hours.close_oh(ctx.guild, 'test')
 
     await office_hours.open_oh(ctx.guild, 'test')
 
@@ -123,7 +167,9 @@ async def end_tests(ctx):
 
     await office_hours.close_oh(ctx.guild, 'test')
     
-    quit(0)
+    # TODO maybe use ctx.bot.logout()
+    await ctx.bot.close()
+    # quit(0)
 
 
 if __name__ == '__main__':

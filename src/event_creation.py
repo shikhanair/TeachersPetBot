@@ -39,7 +39,7 @@ async def get_times(ctx, event_type, command_invoker):
     return new_times
 
 
-async def create_event(ctx):
+async def create_event(ctx, testing_mode):
     command_invoker = ctx.author
 
     if ctx.channel.name == 'instructor-commands':
@@ -52,8 +52,8 @@ async def create_event(ctx):
             ],
         )
 
-        interaction = await bot.wait_for('button_click')
-        if interaction.custom_id == 'assignment':
+        button_clicked = (await bot.wait_for('message')).content if testing_mode else (await bot.wait_for('button_click')).custom_id
+        if button_clicked == 'assignment':
             await ctx.send('What would you like the assignment to be called')
             msg = await bot.wait_for('message', check=lambda m: m.author == command_invoker)
             title = msg.content.strip()
@@ -105,7 +105,7 @@ async def create_event(ctx):
             # TODO add assignment to events list
 
             await ctx.send('Assignment successfully created!')
-        elif interaction.custom_id == 'exam':
+        elif button_clicked == 'exam':
             await ctx.send('What is the title of this exam?')
             msg = await bot.wait_for('message', check=lambda m: m.author == command_invoker)
             title = msg.content.strip()
@@ -142,7 +142,7 @@ async def create_event(ctx):
             # TODO add exam to events list
 
             await ctx.send('Exam successfully created!')
-        elif interaction.custom_id == 'office-hour':
+        elif button_clicked == 'office-hour':
             all_instructors = []
             for mem in ctx.guild.members:
                 is_instructor = next((role.name == 'Instructor' for role in mem.roles), None) is not None
@@ -165,8 +165,9 @@ async def create_event(ctx):
                 ]
             )
 
-            instr_select_interaction = await bot.wait_for('select_option')
-            instructor = instr_select_interaction.values[0]
+            # instr_select_interaction = await bot.wait_for('select_option')
+            # instructor = instr_select_interaction.values[0]
+            instructor = (await bot.wait_for('message')).content if testing_mode else (await bot.wait_for('select_option')).values[0]
 
             await ctx.send(
                 'Which day would you like the office hour to be on?',
@@ -186,8 +187,13 @@ async def create_event(ctx):
                 ]
             )
 
-            day_interaction = await bot.wait_for('select_option', check=lambda x: x.values[0] in ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))
-            day = day_interaction.values[0]
+            # day_interaction = await bot.wait_for('select_option', check=lambda x: x.values[0] in ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))
+            day = (
+                (await bot.wait_for('message')).content
+                if testing_mode else
+                (await bot.wait_for('select_option', check=lambda x: x.values[0] in ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))).values[0]
+            )
+            # day = day_interaction.values[0]
             day_num = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').index(day)
 
             times = await get_times(ctx, 'office hour', command_invoker)
