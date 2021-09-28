@@ -1,3 +1,4 @@
+import discord
 from utils import wait_for_msg
 
 async def test_create_assignment_valid(testing_bot, commands_channel):
@@ -200,6 +201,13 @@ async def test_create_oh_invalid_times(testing_bot, commands_channel):
 
 async def test(testing_bot, guild_id):
     commands_channel = next(ch for ch in testing_bot.get_guild(guild_id).text_channels if ch.name == 'instructor-commands')
+
+    # Add instructor role to bot
+    guild = testing_bot.get_guild(guild_id)
+    role = discord.utils.get(guild.roles, name="Instructor")
+    member = guild.get_member(testing_bot.user.id)
+    await member.add_roles(role)
+
     await test_create_assignment_valid(testing_bot, commands_channel)
     await test_create_assignment_invalid_url(testing_bot, commands_channel)
     await test_create_assignment_invalid_date(testing_bot, commands_channel)
@@ -211,3 +219,6 @@ async def test(testing_bot, guild_id):
 
     await test_create_oh_valid(testing_bot, commands_channel)
     await test_create_oh_invalid_times(testing_bot, commands_channel)
+
+    # remove instructor role from bot
+    await member.remove_roles(role)
