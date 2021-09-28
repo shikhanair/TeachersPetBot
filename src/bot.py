@@ -1,5 +1,6 @@
 import os
 import discord
+from discord.utils import get
 from discord.ext import commands
 from dotenv import load_dotenv
 from discord_components import DiscordComponents, Button, ButtonStyle
@@ -37,6 +38,35 @@ async def on_ready():
     print('------')
 
 @bot.event
+async def on_guild_join(guild):
+    for channel in guild.text_channels:
+        if channel.permissions_for(guild.me).send_messages:
+            await channel.send('Hi there, I\'m TeachersPetBot, and I\'m here to help you manage your class discord! Let\'s do some quick setup.')
+            #create roles if they don't exist
+            if 'Instructor' in guild.roles:
+                await channel.send("Instructor Role already exists")
+            else:
+                await guild.create_role(name="Instructor", colour=discord.Colour(0x0062ff), permissions=discord.Permissions.all())
+            #Assign Instructor role to admin
+            leader = guild.owner
+            leadrole = get(guild.roles, name='Instructor')
+            await channel.send(leader.name + " has been given Instructor role!")
+            await leader.add_roles(leadrole, reason=None, atomic=True)
+            await channel.send("To assign more Instructors, type \"!setInstructor @<member>\"")
+            #Create Text channels if they don't exist
+            if 'instructor-commands' not in guild.text_channels:
+                await guild.create_text_channel('instructor-commands')
+                await channel.send("instructor-commands channel has been added!")
+            if 'q-and-a' not in guild.text_channels:
+                await guild.create_text_channel('q-and-a')
+                await channel.send("q-and-a channel has been added!")
+            if 'course-calendar' not in guild.text_channels:
+                await guild.create_text_channel('course-calendar')
+                await channel.send("course-calendar channel has been added!")
+
+        break
+
+@bot.event
 async def on_message(message):
     if message.author == bot.user:
         return
@@ -61,6 +91,13 @@ async def on_message_edit(before, after):
 @bot.command()
 async def test(ctx):
     await ctx.send('test successful')
+
+@bot.command()
+@commands.has_role('Instructor')
+async def setInstructor(ctx, member:discord.Member):
+    irole = get(ctx.guild.roles, name='Instructor')
+    await member.add_roles(irole, reason=None, atomic=True)
+    await ctx.channel.send(member.name + " has been given Instructor role!")
 
 @bot.command(name='create', help='Create a new event.')
 # @commands.dm_only()

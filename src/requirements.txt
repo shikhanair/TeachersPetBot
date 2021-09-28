@@ -2,3 +2,4 @@ discord.py==1.7.3
 better_profanity==0.7.0
 numpy==1.21.2
 validators==0.18.2
+discord_components==2.1.1
