@@ -1,4 +1,4 @@
-# Teacher's Pet
+# Teacher's Pet <img src="https://github.com/shikhanair/TeachersPetBot/blob/main/images/teacherspet.PNG" alt="alt text" width=75 height=75>
 
 ## Streamline Your Class Discord
 
