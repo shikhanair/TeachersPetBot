@@ -14,11 +14,11 @@ Total Points from Self-Assessment:
 |Docs: why: docs tell a story, motivate the whole thing, deliver a punchline that makes you want to rush out and use the thing|2| [README.md](https://github.com/shikhanair/TeachersPetBot/blob/main/README.md)|
 |Docs: short video, animated, hosted on your repo. That convinces people why they want to work on your code.|
 | Use of version control tools|3 |
-|Use of  style checkers | |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
-| Use of code  formatters. | |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
-| Use of syntax checkers. | |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
+|Use of  style checkers | 3|[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
+| Use of code  formatters. | 3|[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
+| Use of syntax checkers. | 3|[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
 | Use of code coverage ||
-| other automated analysis tools||
+| other automated analysis tools| 3|[codecov automation](https://github.com/shikhanair/TeachersPetBot)|
 | test cases exist|3|[test directory](https://github.com/shikhanair/TeachersPetBot/tree/main/test)|
 | test cases are routinely executed|3|[GH Action](https://github.com/shikhanair/TeachersPetBot/blob/main/.github/workflows/test.yml)|
  | the files CONTRIBUTING.md lists coding standards and lots of tips on how to extend the system without screwing things up|3|[CONTRIBUTING.md](https://github.com/shikhanair/TeachersPetBot/blob/main/CONTRIBUTING.md)|
@@ -29,7 +29,7 @@ Total Points from Self-Assessment:
 | evidence that the whole team is using the same tools (e.g. config files in the repo, updated by lots of different people)|3 |[requirements.txt](https://github.com/shikhanair/TeachersPetBot/blob/main/requirements.txt)|
 | evidence that the whole team is using the same tools (e.g. tutor can ask anyone to share screen, they demonstrate the system running on their computer)|3 |
 | evidence that the members of the team are working across multiple places in the code base|3 |
-|short release cycles |1|
+|short release cycles |3|
 | Does your website and documentation provide a clear, high-level overview of your software? | 3 | [README.md](https://github.com/shikhanair/TeachersPetBot/blob/main/README.md)|
 | Does your website and documentation clearly describe the type of user who should use your software? | 3| [README.md](https://github.com/shikhanair/TeachersPetBot/blob/main/README.md)|
 | Do you publish case studies to show how your software has been used by yourself and others? | 0 |
@@ -45,7 +45,7 @@ Total Points from Self-Assessment:
 | Do you provide a comprehensive guide to all your software’s commands, functions and options? |3| [README.md](https://github.com/shikhanair/TeachersPetBot/blob/main/README.md)|
 | Do you provide troubleshooting information that describes the symptoms and step-by-step solutions for problems and error messages? | 1|[Installation/Testing guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md)[CONTRIBUTING.md](https://github.com/shikhanair/TeachersPetBot/blob/main/CONTRIBUTING.md)|
 | If your software can be used as a library, package or service by other software, do you provide comprehensive API documentation? | 3|[Installation/Testing guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md)|
-| Do you store your documentation under revision control with your source code? |
+| Do you store your documentation under revision control with your source code? |3|
 | Do you publish your release history e.g. release data, version numbers, key features of each release etc. on your web site or in your documentation? | 3 |
 | Does your software describe how a user can get help with using your software? |3 | [CONTRIBUTING.md](https://github.com/shikhanair/TeachersPetBot/blob/main/CONTRIBUTING.md)|
 | Does your website and documentation describe what support, if any, you provide to users and developers? |3 | [CONTRIBUTING.md](https://github.com/shikhanair/TeachersPetBot/blob/main/CONTRIBUTING.md)|
