@@ -16,7 +16,7 @@ Software Engineering Project 1 for CSC 510
 
 Teacher's Pet is a Discord Bot for class instructors to streamline their Discord servers. Discord is a great tool for communication and its functionalities can be enhanced by bots and integrations. There are many tools for organizing classes, but they are often hard to manage. They rarely have good communication mechanisms or ability to connect with other tools. This bot allows instructors to host their classes on Discord, combining communication tools with functionality for assignments, scheduling, and office hours. Instructors and students no longer have to go between platforms to view course details, forums, events, calls, and more.
 
-<h2 align="center"> Bot Commands </h1>
+<h2 align="center"> Bot Commands </h2>
 
 `!setInstructor @<member>` Set a server member to be an instructor (Instructor command)
 
@@ -35,7 +35,7 @@ Teacher's Pet is a Discord Bot for class instructors to streamline their Discord
 `!create` Start creating an event (Instructor command)  
 
 
-<h2 align="center"> Installation and Running </h1>
+<h2 align="center"> Installation and Running </h2>
 
 #### Tools and Libraries Used
 In addition to the packages from [requirements.txt](https://github.com/shikhanair/TeachersPetBot/blob/main/requirements.txt) which need to be installed, please have the following installed on your machine:
@@ -44,11 +44,11 @@ In addition to the packages from [requirements.txt](https://github.com/shikhanai
 
 To install and run Teacher's Pet, follow instructions in the [Installation and Testing Guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md).
 
-<h2 align="center"> Testing </h1>
+<h2 align="center"> Testing </h2>
 
 To run tests on the Teacher's Pet, follow instructions in the [Installation and Testing Guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md#Run-Tests).
 
-<h2 align="center"> TeachersPetBot Features </h1>
+<h2 align="center"> TeachersPetBot Features </h2>
 
 ### Initialization
 
@@ -100,7 +100,8 @@ Once the instructor is ready to help the next student in the queue, they may ent
 
 Using the Python package better-profanity, Teacher's Pet will catch profane words sent by members of the guild, delete the message, and re-send the exact message with the bad word(s) censored out. It will also catch profane words in messages which have been edited to incude bad words. This package supports censoring based off any non-alphabetical word dividers and swears with custom characters. NOTE: Currently the Bot does not censor swears which have had extra alphabetical characters added.
 
-<h2 align="center"> Future Scope </h1>
+<h2 align="center"> Future Scope </h2>
+
 This bot has endless possibilities for functionality. Features which we are interested in adding but did not have time for include but are not limited to:
 * Class Polls
 * Multi-Guild Handling
@@ -110,6 +111,7 @@ This bot has endless possibilities for functionality. Features which we are inte
 For a full list of future features, upgrades, and bug fixes, please visit our [Project 1 Board](https://github.com/shikhanair/TeachersPetBot/projects/1).
 
 <h2 align="center"> How to Contribute? </h2>
+
 Check out our [CONTRIBUTING.md](https://github.com/shikhanair/TeachersPetBot/blob/main/CONTRIBUTING.md) for instructions on contributing to this repo and helping enhance this Discord Bot, as well as our [Code of Conduct](https://github.com/shikhanair/TeachersPetBot/blob/main/CODE_OF_CONDUCT.md) guidelines.
 
 <h2 align="center"> License </h2>
