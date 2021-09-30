@@ -43,11 +43,11 @@ def update_calendar():
                 'date ASC, ' +
                 'due_hr ASC, ' +
                 'due_min ASC'):
-        assignments.append([ f'{date} {due_hr}:{due_min}', f'{date} {due_hr}:{due_min}\n{title}\n{desc}\n{link}\n\n'])
+        assignments.append([ f'{date} {due_hr}:{due_min}',
+            f'{date} {due_hr}:{due_min}\n{title}\n{desc}\n{link}\n\n'])
 
     exams = []
-    for title, desc, date, begin_hr, begin_min, end_hr, end_min in
-        db.select_query(
+    for title, desc, date, begin_hr, begin_min, end_hr, end_min in db.select_query(
             'SELECT ' +
                 'title, desc, date, begin_hr, begin_min, end_hr, end_min ' +
             'FROM ' +
@@ -56,7 +56,8 @@ def update_calendar():
                 'date ASC, ' +
                 'begin_hr ASC, '
                 'begin_min ASC'):
-        exams.append([ f'{date} {begin_hr}:{begin_min}', f'{date} {begin_hr}:{begin_min} - {end_hr}:{end_min}\n{title}\n{desc}\n\n'])
+        exams.append([ f'{date} {begin_hr}:{begin_min}',
+            f'{date} {begin_hr}:{begin_min} - {end_hr}:{end_min}\n{title}\n{desc}\n\n'])
 
     # get current time for comparison and make sure it is of same string format
     current_time = datetime.now().strftime('%m-%d-%Y %H:%M')

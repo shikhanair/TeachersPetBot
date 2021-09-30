@@ -40,7 +40,6 @@ class QuestionsAnswers:
 ###########################
 async def question(ctx, qs):
     ''' add a question '''
-    global QNA
     global QUESTION_NUMBER
 
     # format question
@@ -72,7 +71,6 @@ async def question(ctx, qs):
 ###########################
 async def answer(ctx, num, ans):
     ''' answer the specific question '''
-    global QNA
 
     # check if question number exists
     if int(num) not in QNA.keys():

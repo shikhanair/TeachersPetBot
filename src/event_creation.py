@@ -1,8 +1,6 @@
 ###########################
 # Functionality for creating new events
 ###########################
-from os import times
-from discord.ext.commands.core import check
 from discord_components import Button, ButtonStyle, Select, SelectOption
 import datetime
 import validators

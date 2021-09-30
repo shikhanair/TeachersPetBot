@@ -224,7 +224,7 @@ async def check_office_hour_loop():
             if curr_day == day:
                 begin_time, end_time = office_hour.times
                 ta_name_channelified = office_hour.ta.lower().replace(" ", "-")
-                if begin_time <= curr_time and curr_time <= end_time and
+                if begin_time <= curr_time <= end_time and \
                     ta_name_channelified not in office_hour_queues:
                     await open_oh(guild, office_hour.ta)
                 elif curr_time > end_time and ta_name_channelified in office_hour_queues:

@@ -21,8 +21,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 #GUILD = 'TeachersPet-Dev'
 TESTING_MODE = None
 
-intents=discord.Intents.default()
-intents.members = True
+intents=discord.Intents.all()
 bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
 
 ###########################
