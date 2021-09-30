@@ -59,7 +59,7 @@ async def test_answer(testing_bot, guild_id):
     qna_channel = discord.utils.get(testing_bot.get_all_channels(), name='q-and-a')
     await qna_channel.send('!answer 1 \"World\"')
 
-    sleep(0.5)
+    sleep(1.5)
 
     messages = await qna_channel.history(limit=1).flatten()
     for m in messages:
@@ -86,7 +86,7 @@ async def test_instr_answer(testing_bot, guild_id):
     qna_channel = discord.utils.get(testing_bot.get_all_channels(), name='q-and-a')
     await qna_channel.send('!answer 1 \"Hello World\"')
 
-    sleep(0.5)
+    sleep(1.5)
 
     # check message was updated
     messages = await qna_channel.history(limit=1).flatten()

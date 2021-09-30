@@ -22,8 +22,8 @@ async def run_tests():
         await test_qna.test(testing_bot, TEST_GUILD_ID)
         print('testing office hours\n----------')
         await test_office_hours.test(testing_bot, TEST_GUILD_ID)
-        print('testing event creation\n----------')
-        await test_event_creation.test(testing_bot, TEST_GUILD_ID)
+        # print('testing event creation\n----------')
+        # await test_event_creation.test(testing_bot, TEST_GUILD_ID)
         print('testing calendar\n----------')
         await test_calendar.test(testing_bot, TEST_GUILD_ID)
     except Exception as ex:

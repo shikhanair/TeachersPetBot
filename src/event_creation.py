@@ -72,7 +72,7 @@ async def create_event(ctx, testing_mode):
             ],
         )
 
-        button_clicked = ((await wait_for_msg(BOT, ctx.channel))
+        button_clicked = ((await wait_for_msg(BOT, ctx.channel)).content
             if testing_mode else (await BOT.wait_for('button_click')).custom_id)
         if button_clicked == 'assignment':
             await ctx.send('What would you like the assignment to be called')
@@ -195,7 +195,7 @@ async def create_event(ctx, testing_mode):
 
             # instr_select_interaction = await BOT.wait_for('select_option')
             # instructor = instr_select_interaction.values[0]
-            instructor = ((await wait_for_msg(BOT, ctx.channel))
+            instructor = ((await wait_for_msg(BOT, ctx.channel)).content
                 if testing_mode else (await BOT.wait_for('select_option')).values[0])
 
             await ctx.send(
@@ -219,7 +219,7 @@ async def create_event(ctx, testing_mode):
             # day_interaction = await BOT.wait_for('select_option', check=lambda x: x.values[0] in
             # ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))
             day = (
-                (await wait_for_msg(BOT, ctx.channel))
+                (await wait_for_msg(BOT, ctx.channel)).content
                 if testing_mode else
                 (await BOT.wait_for('select_option', check=lambda x: x.values[0] in
                     ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))).values[0]
