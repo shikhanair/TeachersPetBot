@@ -14,11 +14,11 @@ Total Points from Self-Assessment:
 |Docs: why: docs tell a story, motivate the whole thing, deliver a punchline that makes you want to rush out and use the thing|2| [README.md](https://github.com/shikhanair/TeachersPetBot/blob/main/README.md)|
 |Docs: short video, animated, hosted on your repo. That convinces people why they want to work on your code.|
 | Use of version control tools|3 |
-|Use of  style checkers |3 |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
-| Use of code  formatters. |3 |[black configuration](https://github.com/shikhanair/TeachersPetBot/blob/main/pyproject.toml)|
-| Use of syntax checkers. |3 |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
-| Use of code coverage |3|
-| other automated analysis tools|3|
+|Use of  style checkers | |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
+| Use of code  formatters. ||[black configuration](https://github.com/shikhanair/TeachersPetBot/blob/main/pyproject.toml)|
+| Use of syntax checkers. | |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
+| Use of code coverage ||
+| other automated analysis tools||
 | test cases exist|3|[test directory](https://github.com/shikhanair/TeachersPetBot/tree/main/test)|
 | test cases are routinely executed|3|[GH Action](https://github.com/shikhanair/TeachersPetBot/blob/main/.github/workflows/test.yml)|
  | the files CONTRIBUTING.md lists coding standards and lots of tips on how to extend the system without screwing things up|3|[CONTRIBUTING.md](https://github.com/shikhanair/TeachersPetBot/blob/main/CONTRIBUTING.md)|
