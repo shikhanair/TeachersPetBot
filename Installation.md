@@ -22,7 +22,6 @@ To run the Teacher's Pet Bot:
 1. Ensure you have the following installed:
     * [Python 3](https://www.python.org/downloads/) 
     * [pip](https://pip.pypa.io/en/stable/installation/)
-    * [SQLite w/Tools](https://www.sqlite.org/download.html)
 2. Clone this repo onto your local machine
 3. In the repository directory, run `pip install -r src/requirements.txt`
 4. Run `python src/bot.py` to start the bot
