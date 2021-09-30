@@ -7,13 +7,14 @@ Software Engineering Project 1 for CSC 510
 Teacher's Pet is a Discord Bot for class instructors to streamline their Discord servers. Discord is a great tool for communication and its functionalities can be enhanced by bots and integrations. There are many tools for organizing classes, but they are often hard to manage. They rarely have good communication mechanisms or ability to connect with other tools. This bot allows instructors to host their classes on Discord, combining communication tools with functionality for assignments, scheduling, and office hours. Instructors and students no longer have to go between platforms to view course details, forums, events, calls, and more.
 
 ### Bot Commands
-`!setInstructor @<member>` Set a server member to be an instructor  
+`!setInstructor @<member>` Set a server member to be an instructor (Instructor command)
 `!ask "<question>"` Ask a question  
 `!answer <question_number> "<answer>"` Answer a question  
-`!oh enter` Enter an office hour queue as an individual student
-`!oh enter <group_id>` Enter an office hour queue with a group of students
-`!oh exit` Exit the office hour queue
-`!oh next` Go to next student in queue as an instructor
+`!oh enter` Enter an office hour queue as an individual student  
+`!oh enter <group_id>` Enter an office hour queue with a group of students  
+`!oh exit` Exit the office hour queue  
+`!oh next` Go to next student in queue as an instructor (Instructor command)  
+`!create` Start creating an event (Instructor command)  
 
 
 ### Installation and Running
@@ -52,7 +53,6 @@ Student answer:
 ![image](https://user-images.githubusercontent.com/32313919/135383913-4a7431c3-9e14-466b-9a07-683df39bc1bc.png)  
 Instructor answer:  
 ![image](https://user-images.githubusercontent.com/32313919/135383932-551850ef-6f6c-4349-b3a4-d36ce583de14.png)
-
 
 
 #### Events/Calendar
