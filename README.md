@@ -3,6 +3,7 @@
   
 <h2 align="center"> Streamline Your Class Discord</h1>
   
+  [![codecov](https://codecov.io/gh/shikhanair/TeachersPetBot/branch/main/graph/badge.svg?token=ZQUQ8UC2Y6)](https://codecov.io/gh/shikhanair/TeachersPetBot)
 
 Software Engineering Project 1 for CSC 510
 
