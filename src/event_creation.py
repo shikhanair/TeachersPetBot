@@ -4,6 +4,7 @@
 import datetime
 from discord_components import Button, ButtonStyle, Select, SelectOption
 import validators
+from utils import wait_for_msg
 import office_hours
 import cal
 
@@ -20,7 +21,7 @@ BOT = None
 #      - command_invoker: discord user who is creating event
 # Outputs: the begin and end times for the event
 ###########################
-async def get_times(ctx, event_type, command_invoker):
+async def get_times(ctx, event_type):
     ''' get times input flow '''
     await ctx.send(
         f'Which times would you like the {event_type} to be on?\n'
@@ -28,7 +29,7 @@ async def get_times(ctx, event_type, command_invoker):
         f'For example, setting {event_type} from 9:30am to 1pm can be done as 9:30-13'
     )
 
-    msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
+    msg = await wait_for_msg(BOT, ctx.channel)
 
     times = msg.content.strip().split('-')
     if len(times) != 2:
@@ -60,7 +61,6 @@ async def get_times(ctx, event_type, command_invoker):
 ###########################
 async def create_event(ctx, testing_mode):
     ''' create event input flow '''
-    command_invoker = ctx.author
 
     if ctx.channel.name == 'instructor-commands':
         await ctx.send(
@@ -72,15 +72,15 @@ async def create_event(ctx, testing_mode):
             ],
         )
 
-        button_clicked = ((await BOT.wait_for('message')).content
+        button_clicked = ((await wait_for_msg(BOT, ctx.channel))
             if testing_mode else (await BOT.wait_for('button_click')).custom_id)
         if button_clicked == 'assignment':
             await ctx.send('What would you like the assignment to be called')
-            msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
+            msg = await wait_for_msg(BOT, ctx.channel)
             title = msg.content.strip()
 
             await ctx.send('Link associated with submission? Type N/A if none')
-            msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
+            msg = await wait_for_msg(BOT, ctx.channel)
             link = msg.content.strip() if msg.content.strip() != 'N/A' else None
 
             if link and not validators.url(link):
@@ -88,12 +88,12 @@ async def create_event(ctx, testing_mode):
                 return
 
             await ctx.send('Extra description for assignment? Type N/A if none')
-            msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
+            msg = await wait_for_msg(BOT, ctx.channel)
             description = msg.content.strip() if msg.content.strip() != 'N/A' else None
 
             await ctx.send('What is the due date of this assignment?\n' +
                 'Enter in format `MM-DD-YYYY`')
-            msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
+            msg = await wait_for_msg(BOT, ctx.channel)
             date = msg.content.strip()
 
             is_valid = len(date) == 10
@@ -108,7 +108,7 @@ async def create_event(ctx, testing_mode):
 
             await ctx.send('What time is this assignment due?\nEnter in 24-hour format' +
                 ' e.g. an assignment due at 11:59pm can be inputted as 23:59')
-            msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
+            msg = await wait_for_msg(BOT, ctx.channel)
             t = msg.content.strip()
 
             try:
@@ -131,15 +131,15 @@ async def create_event(ctx, testing_mode):
             await cal.display_events(None)
         elif button_clicked == 'exam':
             await ctx.send('What is the title of this exam?')
-            msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
+            msg = await wait_for_msg(BOT, ctx.channel)
             title = msg.content.strip()
 
             await ctx.send('What content is this exam covering?')
-            msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
+            msg = await wait_for_msg(BOT, ctx.channel)
             description = msg.content.strip()
 
             await ctx.send('What is the date of this exam?\nEnter in format `MM-DD-YYYY`')
-            msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
+            msg = await wait_for_msg(BOT, ctx.channel)
             date = msg.content.strip()
 
             is_valid = len(date) == 10
@@ -152,7 +152,7 @@ async def create_event(ctx, testing_mode):
                 await ctx.send('Invalid date. Aborting.')
                 return
 
-            times = await get_times(ctx, 'exam', command_invoker)
+            times = await get_times(ctx, 'exam')
             if not times:
                 return
 
@@ -195,7 +195,7 @@ async def create_event(ctx, testing_mode):
 
             # instr_select_interaction = await BOT.wait_for('select_option')
             # instructor = instr_select_interaction.values[0]
-            instructor = ((await BOT.wait_for('message')).content
+            instructor = ((await wait_for_msg(BOT, ctx.channel))
                 if testing_mode else (await BOT.wait_for('select_option')).values[0])
 
             await ctx.send(
@@ -219,7 +219,7 @@ async def create_event(ctx, testing_mode):
             # day_interaction = await BOT.wait_for('select_option', check=lambda x: x.values[0] in
             # ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))
             day = (
-                (await BOT.wait_for('message')).content
+                (await wait_for_msg(BOT, ctx.channel))
                 if testing_mode else
                 (await BOT.wait_for('select_option', check=lambda x: x.values[0] in
                     ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))).values[0]
@@ -227,7 +227,7 @@ async def create_event(ctx, testing_mode):
             # day = day_interaction.values[0]
             day_num = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').index(day)
 
-            times = await get_times(ctx, 'office hour', command_invoker)
+            times = await get_times(ctx, 'office hour')
             if not times:
                 return
 
