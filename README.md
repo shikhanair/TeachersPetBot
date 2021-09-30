@@ -6,6 +6,9 @@ Software Engineering Project 1 for CSC 510
 
 Teacher's Pet is a Discord Bot for class instructors to streamline their Discord servers.
 
+### Bot Commands
+
+
 ### Installation and Running
 
 #### Tools and Libraries Used
