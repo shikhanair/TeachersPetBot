@@ -100,17 +100,22 @@ async def office_hour_command(ctx, command, *args):
                     else:
                         await ctx.author.send(
                             'The office hour group you have attempted to join does not exist. '
-                            'Please ensure you enter a valid group ID when attempting to join an office hour group.'
+                            'Please ensure you enter a valid group ID when attempting to '
+                            'join an office hour group.'
                         )
                 await office_hour_queue.waiting_room.set_permissions(
                     ctx.author, read_messages=True, send_messages=True)
             else:
                 await ctx.author.send(
                     'You are already in the office hour queue so you cannot join again. '
-                    'If you would like to join an office hour group, please exit the queue and join the group.'
+                    'If you would like to join an office hour group, please exit the queue '
+                    'and join the group.'
                 )
         elif command == 'exit' and not is_instructor:
-            queued_group = next((group for group in queue if ctx.author in group.group_members), None)
+            queued_group = next(
+                (group for group in queue if ctx.author in group.group_members),
+                None
+            )
             if queued_group:
                 queued_group.group_members.remove(ctx.author)
                 if len(queued_group.group_members) == 0:
@@ -122,14 +127,21 @@ async def office_hour_command(ctx, command, *args):
             waiting_room = office_hour_queue.waiting_room
 
             if office_hour_queue.current_student:
-                await voice_channel.set_permissions(office_hour_queue.current_student, overwrite=None)
+                await voice_channel.set_permissions(
+                    office_hour_queue.current_student,
+                    overwrite=None
+                )
 
             next_group = queue.pop(0)
             for member in next_group.group_members:
                 await voice_channel.set_permissions(member, read_messages=True, send_messages=True)
                 await waiting_room.set_permissions(member, overwrite=None)
 
-                message = f"{office_hour_queue.ta_name} is ready to help {'you' if len(next_group.group_members) == 1 else 'your group'}. Please join the office hour voice channel."
+                message = (
+                    f'{office_hour_queue.ta_name} is ready to help '
+                    f"{'you' if len(next_group.group_members) == 1 else 'your group'}."
+                    'Please join the office hour voice channel.'
+                )
                 await member.send(message)
             await office_hour_queue.display_queue()
     else:
@@ -170,7 +182,8 @@ async def open_oh(guild, ta):
         "while you wait for your turn if you'd like. When it is your turn, you will be notified."
     )
 
-    office_hour_queues[ta_name_channelified] = OfficeHourQueue(ta, text_channel, voice_channel, waiting_room)
+    office_hour_queues[ta_name_channelified] = OfficeHourQueue(ta, text_channel, voice_channel,
+        waiting_room)
 
 ###########################
 # Function: close_oh
@@ -241,6 +254,9 @@ async def check_office_hour_loop():
 def add_office_hour(guild, ta_office_hour):
     all_guilds_ta_office_hours[guild.id].append(ta_office_hour)
 
+bot = None
+all_guilds_ta_office_hours = None
+office_hour_queues = None
 ###########################
 # Function: init
 # Description: initializes office hours module
@@ -259,9 +275,9 @@ def init(b):
         ta_office_hours = [
             TaOfficeHour(ta, day, (time(hour=begin_hr, minute=begin_min),
                 time(hour=end_hr, minute=end_min)))
-            for ta, day, begin_hr, begin_min, end_hr, end_min
-            in db.select_query('SELECT ta, day, begin_hr, begin_min, end_hr, ' + 
-                'end_min FROM ta_office_hours WHERE guild_id = ?', [guild.id])
+            for ta, day, begin_hr, begin_min, end_hr, end_min in db.select_query(
+                'SELECT ta, day, begin_hr, begin_min, end_hr, end_min '
+                'FROM ta_office_hours WHERE guild_id = ?', [guild.id])
         ]
 
         all_guilds_ta_office_hours[guild.id] = ta_office_hours
