@@ -12,6 +12,10 @@ Teacher's Pet is a Discord Bot for class instructors to streamline their Discord
 ### Installation and Running
 
 #### Tools and Libraries Used
+In addition to the packages from [requirements.txt](https://github.com/shikhanair/TeachersPetBot/blob/main/requirements.txt) which need to be installed, please have the following installed on your machine:
+* [Python 3.9.7](https://www.python.org/downloads/)
+* [Sqlite](https://www.sqlite.org/download.html)
+
 To install and run Teacher's Pet, follow instructions in the [Installation and Testing Guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md).
 
 ### Testing
