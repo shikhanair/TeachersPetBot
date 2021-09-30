@@ -1,18 +1,16 @@
-from datetime import datetime, timedelta
 import os
+import logging
 import discord
 from discord.utils import get
 from discord.ext import commands
 from dotenv import load_dotenv
-from discord_components import DiscordComponents, Button, ButtonStyle
+from discord_components import DiscordComponents
 
-import init_server
 import event_creation
 import cal
 import office_hours
 import profanity
 import qna
-import logging
 import db
 
 logging.basicConfig(level=logging.INFO)
@@ -21,6 +19,7 @@ logging.basicConfig(level=logging.INFO)
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 #GUILD = 'TeachersPet-Dev'
+TESTING_MODE = None
 
 intents=discord.Intents.default()
 intents.members = True
@@ -32,8 +31,8 @@ bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', in
 ###########################
 @bot.event
 async def on_ready():
-    global testing_mode
-    testing_mode = False
+    global TESTING_MODE
+    TESTING_MODE = False
 
     DiscordComponents(bot)
     db.connect()
@@ -192,7 +191,7 @@ async def setInstructor(ctx, member:discord.Member):
 # @commands.dm_only()
 @commands.has_role('Instructor')
 async def create_event(ctx):
-    await event_creation.create_event(ctx, testing_mode)
+    await event_creation.create_event(ctx, TESTING_MODE)
 
 ###########################
 # Function: oh
@@ -253,14 +252,15 @@ async def answer_question(ctx, q_num, answer):
 ###########################
 @bot.command('begin-tests')
 async def begin_tests(ctx):
-    global testing_mode
+    global TESTING_MODE
 
     if ctx.author.id != 889697640411955251:
         return
 
-    testing_mode = True
-    
-    test_oh_chan = next((ch for ch in ctx.guild.text_channels if 'office-hour-test' in ch.name), None)
+    TESTING_MODE = True
+
+    test_oh_chan = next((ch for ch in ctx.guild.text_channels
+        if 'office-hour-test' in ch.name), None)
     if test_oh_chan:
         await office_hours.close_oh(ctx.guild, 'test')
 
