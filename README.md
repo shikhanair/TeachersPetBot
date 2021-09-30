@@ -2,8 +2,15 @@
 <h1 align="center"> Teacher's Pet </h1>
   
 <h2 align="center"> Streamline Your Class Discord</h1>
-  
-  [![codecov](https://codecov.io/gh/shikhanair/TeachersPetBot/branch/main/graph/badge.svg?token=ZQUQ8UC2Y6)](https://codecov.io/gh/shikhanair/TeachersPetBot)
+
+![Python](https://img.shields.io/badge/python-v3.7+-brightgreen.svg)
+![GitHub](https://img.shields.io/github/license/shikhanair/TeachersPetBot)
+![GitHub issues](https://img.shields.io/github/issues/shikhanair/TeachersPetBot)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/shikhanair/TeachersPetBot)
+
+![Lines of code](https://img.shields.io/tokei/lines/github/shikhanair/TeachersPetBot)
+
+[![codecov](https://codecov.io/gh/shikhanair/TeachersPetBot/branch/main/graph/badge.svg?token=ZQUQ8UC2Y6)](https://codecov.io/gh/shikhanair/TeachersPetBot)
 
 Software Engineering Project 1 for CSC 510
 
@@ -43,7 +50,7 @@ To run tests on the Teacher's Pet, follow instructions in the [Installation and 
 
 <h2 align="center"> TeachersPetBot Features </h1>
 
-#### Initialization
+### Initialization
 
 When Teacher's Pet has been added to a new server as a bot, it will do the following:
 
@@ -56,7 +63,7 @@ In addition to this auto-set up, there is also a command which allows a user wit
 
 ![alt text](https://github.com/shikhanair/TeachersPetBot/blob/main/images/bot_join.png)
 
-#### Q&A
+### Q&A
 The Q&A functionality allow students to ask and answer questions anonymously. The questions are numbered and when answers are sent, they are combined with the question so they can be easily found. Answers are also marked with `Student Ans` and `Instructor Ans` to distinguish between the sources.  
 To ask a question, type `!ask "Question"` in the #q-and-a channel. Example: `!ask "When is the midterm?"`.  
 ![image](https://user-images.githubusercontent.com/32313919/135383816-430792aa-b8c3-4d6b-8176-1621293d089e.png)  
@@ -67,7 +74,7 @@ Instructor answer:
 ![image](https://user-images.githubusercontent.com/32313919/135383932-551850ef-6f6c-4349-b3a4-d36ce583de14.png)
 
 
-#### Events/Calendar
+### Events/Calendar
 Events are items relevant to a class that are time-sensitive. Currently, the types of events include office hours, exams, and assignments. Events in a class are kept track of, and assignments/exams are displayed in a calendar for students and instructors to see.
 
 Events can be created by instructors. Creation of an event can be initiated in the private `instructor-commands` channel with the `!create` command. The bot will ask the instructor about various details for the event. Once the event is created, it should exist persistently within the system and will be added to the event list.
@@ -76,7 +83,7 @@ The calendar is updated at the creation of any new event that gets displayed on 
 
 ![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/calendar.png)
 
-#### Office Hours
+### Office Hours
 The bot contains functionality for handling TA office hours. After a TA office hour event is added and it is time for a TA's office hour to open, the bot will automatically create office hour channels in the server, allowing students to enter the office hour queue and instructors to help students based on the queue. Once the closing time for the office hour is reached, the channels related to the TA's office hour are automatically deleted.
 
 ##### Entering an office hour (as a student)
@@ -89,7 +96,7 @@ A student may wish to exit the office hour queue for whatever reason; they may d
 Once the instructor is ready to help the next student in the queue, they may enter `!oh next` in the office hour text channel. Upon doing so, DMs will be sent to all group members next in the queue notifying them that it is their turn, and they will be able to enter the office hour voice channel.
 
 
-#### Profanity Censoring 
+### Profanity Censoring 
 
 Using the Python package better-profanity, Teacher's Pet will catch profane words sent by members of the guild, delete the message, and re-send the exact message with the bad word(s) censored out. It will also catch profane words in messages which have been edited to incude bad words. This package supports censoring based off any non-alphabetical word dividers and swears with custom characters. NOTE: Currently the Bot does not censor swears which have had extra alphabetical characters added.
 
