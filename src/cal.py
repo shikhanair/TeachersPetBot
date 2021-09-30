@@ -1,8 +1,7 @@
-import db
+from datetime import datetime
 import discord
 
-from discord_components import Button, ButtonStyle, Select, SelectOption
-from datetime import datetime, time, timezone
+import db
 
 BOT = None
 CALENDAR_EMBED = None
@@ -30,7 +29,8 @@ def update_calendar():
     CALENDAR_EMBED = discord.Embed(title="The Course Calendar, sire",
         description="All of the class assignments and exams!", color=0x0000FF)
 
-    # make a list that contains the string representing the event that has the comparison item as the first index
+    # make a list that contains the string representing the
+    # event that has the comparison item as the first index
     # which is the date, we are comparing as strings but still works for ordering events by date
     # do this for the events we care about in the calendar 'assignments and exams'
     assignments = []
@@ -62,16 +62,17 @@ def update_calendar():
     # get current time for comparison and make sure it is of same string format
     current_time = datetime.now().strftime('%m-%d-%Y %H:%M')
     #Time in EST: 2017-01-19 08:06:14
-    
+
     i = 0
     j = 0
-    
+
     # 2 lists for fields in the calendar
     past_events = ''
     #current_events = ''
     future_events = ''
 
-    # go through the sorted lists and take the earliest date, moving the index of each until all lists are placed
+    # go through the sorted lists and take the earliest date,
+    # moving the index of each until all lists are placed
     # into one of the defined areas
     while (i != len(exams) or j != len(assignments)):
         if (i == len(exams) or (j != len(assignments) and assignments[j][0] < exams[i][0])):
@@ -108,8 +109,8 @@ async def init(b):
     BOT = b
     for guild in BOT.guilds:
         for channel in guild.text_channels:
-            if(channel.name == 'course-calendar'):
+            if channel.name == 'course-calendar':
                 await channel.delete()
-        
+
         channel = await guild.create_text_channel('course-calendar')
         await display_events(channel)

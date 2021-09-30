@@ -48,7 +48,7 @@ async def question(ctx, qs):
     message = await ctx.send(q_str)
 
     # create QNA object
-    new_question = QuestionsAnswers(q, QUESTION_NUMBER, message.id, '')
+    new_question = QuestionsAnswers(qs, QUESTION_NUMBER, message.id, '')
     # add question to list
     QNA[QUESTION_NUMBER] = new_question
 

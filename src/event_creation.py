@@ -1,8 +1,8 @@
 ###########################
 # Functionality for creating new events
 ###########################
-from discord_components import Button, ButtonStyle, Select, SelectOption
 import datetime
+from discord_components import Button, ButtonStyle, Select, SelectOption
 import validators
 import office_hours
 import cal
@@ -43,11 +43,11 @@ async def get_times(ctx, event_type, command_invoker):
         elif len(parts) == 2:
             new_time = (int(parts[0]), int(parts[1]))
         new_times.append(new_time)
-    
+
     if len(new_times) != 2:
         await ctx.send('Incorrect input. Aborting')
         return
-    
+
     return new_times
 
 ###########################
@@ -72,7 +72,8 @@ async def create_event(ctx, testing_mode):
             ],
         )
 
-        button_clicked = (await BOT.wait_for('message')).content if testing_mode else (await BOT.wait_for('button_click')).custom_id
+        button_clicked = ((await BOT.wait_for('message')).content
+            if testing_mode else (await BOT.wait_for('button_click')).custom_id)
         if button_clicked == 'assignment':
             await ctx.send('What would you like the assignment to be called')
             msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
@@ -128,7 +129,7 @@ async def create_event(ctx, testing_mode):
 
             await ctx.send('Assignment successfully created!')
             await cal.display_events(None)
-        elif interaction.custom_id == 'exam':
+        elif button_clicked == 'exam':
             await ctx.send('What is the title of this exam?')
             msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
             title = msg.content.strip()
@@ -167,14 +168,14 @@ async def create_event(ctx, testing_mode):
 
             await ctx.send('Exam successfully created!')
             await cal.display_events(None)
-        elif interaction.custom_id == 'office-hour':
+        elif button_clicked == 'office-hour':
             all_instructors = []
             for mem in ctx.guild.members:
                 is_instructor = next((role.name == 'Instructor'
                     for role in mem.roles), None) is not None
                 if is_instructor:
                     all_instructors.append(mem)
-            
+
             if len(all_instructors) < 1:
                 await ctx.send('There are no instructors in the guild. Aborting')
                 return
