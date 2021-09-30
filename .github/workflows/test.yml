@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - pylint
   pull_request:
     branches:
       - main
+      - pylint
 
 jobs:
   build:
