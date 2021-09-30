@@ -1,3 +1,6 @@
+###########################
+# Functionality for creating new events
+###########################
 from os import times
 from discord.ext.commands.core import check
 from discord_components import Button, ButtonStyle, Select, SelectOption
@@ -10,6 +13,15 @@ import db
 
 bot = None
 
+###########################
+# Function: get_times
+# Description: helper function for acquiring the times an instructor wants an event to be held during
+# Inputs:
+#      - ctx: context of this discord message
+#      - event_type: type of event which times are being asked for
+#      - command_invoker: discord user who is creating event
+# Outputs: the begin and end times for the event
+###########################
 async def get_times(ctx, event_type, command_invoker):
     await ctx.send(
         f'Which times would you like the {event_type} to be on?\n'
@@ -40,7 +52,15 @@ async def get_times(ctx, event_type, command_invoker):
     return new_times
 
 
-async def create_event(ctx):
+###########################
+# Function: create_event
+# Description: creates an event by the specifications of the instructor creating the event
+# Inputs:
+#      - ctx: context of this discord message
+#      - testing_mode: flag indicating whether this event is being created during a system test
+# Outputs: new event created in database
+###########################
+async def create_event(ctx, testing_mode):
     command_invoker = ctx.author
 
     if ctx.channel.name == 'instructor-commands':
@@ -53,8 +73,8 @@ async def create_event(ctx):
             ],
         )
 
-        interaction = await bot.wait_for('button_click')
-        if interaction.custom_id == 'assignment':
+        button_clicked = (await bot.wait_for('message')).content if testing_mode else (await bot.wait_for('button_click')).custom_id
+        if button_clicked == 'assignment':
             await ctx.send('What would you like the assignment to be called')
             msg = await bot.wait_for('message', check=lambda m: m.author == command_invoker)
             title = msg.content.strip()
@@ -64,7 +84,7 @@ async def create_event(ctx):
             link = msg.content.strip() if msg.content.strip() != 'N/A' else None
 
             if link and not validators.url(link):
-                await ctx.send('Invalid date. Aborting.')
+                await ctx.send('Invalid URL. Aborting.')
                 return
 
             await ctx.send('Extra description for assignment? Type N/A if none')
@@ -168,8 +188,9 @@ async def create_event(ctx):
                 ]
             )
 
-            instr_select_interaction = await bot.wait_for('select_option')
-            instructor = instr_select_interaction.values[0]
+            # instr_select_interaction = await bot.wait_for('select_option')
+            # instructor = instr_select_interaction.values[0]
+            instructor = (await bot.wait_for('message')).content if testing_mode else (await bot.wait_for('select_option')).values[0]
 
             await ctx.send(
                 'Which day would you like the office hour to be on?',
@@ -189,8 +210,13 @@ async def create_event(ctx):
                 ]
             )
 
-            day_interaction = await bot.wait_for('select_option', check=lambda x: x.values[0] in ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))
-            day = day_interaction.values[0]
+            # day_interaction = await bot.wait_for('select_option', check=lambda x: x.values[0] in ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))
+            day = (
+                (await bot.wait_for('message')).content
+                if testing_mode else
+                (await bot.wait_for('select_option', check=lambda x: x.values[0] in ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))).values[0]
+            )
+            # day = day_interaction.values[0]
             day_num = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').index(day)
 
             times = await get_times(ctx, 'office hour', command_invoker)
@@ -220,6 +246,13 @@ async def create_event(ctx):
         await ctx.message.delete()
 
         
+###########################
+# Function: init
+# Description: initializes this module, giving it access to discord bot
+# Inputs:
+#      - b: discord bot
+# Outputs: None
+###########################
 def init(b):
     global bot
     bot = b

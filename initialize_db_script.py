@@ -44,9 +44,9 @@ c.execute(SQL_STATEMENT)
 
 SQL_STATEMENT = """INSERT INTO assignments VALUES(
     1,
-    "assign1",
-    "assign1.html",
-    "assign1 desc",
+    "Assignment #1",
+    "https://drive.google.com/assign1.html",
+    "Covers lecture material up to to the due date.",
     "09-25-2021",
     18,
     30
@@ -56,9 +56,9 @@ c.execute(SQL_STATEMENT)
 
 SQL_STATEMENT = """INSERT INTO assignments VALUES(
     1,
-    "assign3",
-    "assign3.html",
-    "assign3 desc",
+    "Assignment #1.2",
+    "https://drive.google.com/assign1.html",
+    "Covers lecture material up to to the due date.",
     "09-26-2021",
     18,
     30
@@ -68,34 +68,34 @@ c.execute(SQL_STATEMENT)
 
 SQL_STATEMENT = """INSERT INTO assignments VALUES(
     1,
-    "assign2",
-    "assign2.html",
-    "assign2 desc",
-    "09-26-2021",
-    15,
-    30
-);"""
-
-c.execute(SQL_STATEMENT)
-
-SQL_STATEMENT = """INSERT INTO exams VALUES(
-    1,
-    "test2",
-    "test2 desc",
-    "09-27-2021",
-    16,
-    30,
-    18,
-    30
-);"""
-
-c.execute(SQL_STATEMENT)
-
-SQL_STATEMENT = """INSERT INTO exams VALUES(
-    1,
-    "test3",
-    "test3 desc",
+    "Assignment #2",
+    "https://drive.google.com/assign2.html",
+    "Covers lecture material up to to the due date.",
     "09-28-2021",
+    18,
+    30
+);"""
+
+c.execute(SQL_STATEMENT)
+
+SQL_STATEMENT = """INSERT INTO exams VALUES(
+    1,
+    "Exam 1",
+    "All materials up to the date of the exam.",
+    "09-29-2021",
+    10,
+    30,
+    11,
+    30
+);"""
+
+c.execute(SQL_STATEMENT)
+
+SQL_STATEMENT = """INSERT INTO exams VALUES(
+    1,
+    "Exam 2",
+    "All materials up to the date of the exam, except material covered by previous exam.",
+    "10-06-2021",
     16,
     30,
     18,
@@ -106,38 +106,15 @@ c.execute(SQL_STATEMENT)
 
 SQL_STATEMENT = """INSERT INTO exams VALUES(
     1,
-    "test1",
-    "test1 desc",
-    "09-26-2021",
+    "Final Exam",
+    "Final exam - covers everything taught!",
+    "12-02-2021",
     14,
     30,
     18,
     30
 );"""
 
-c.execute(SQL_STATEMENT)
-
-SQL_STATEMENT = """INSERT INTO ta_office_hours VALUES(
-    1,
-    "john",
-    "WED",
-    16,
-    30,
-    18,
-    30
-);"""
-
-c.execute(SQL_STATEMENT)
-
-SQL_STATEMENT = """INSERT INTO ta_office_hours VALUES(
-    1,
-    "wendy",
-    "THUR",
-    16,
-    30,
-    18,
-    30
-);"""
 
 c.execute(SQL_STATEMENT)
 
