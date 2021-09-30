@@ -4,10 +4,12 @@
 
 Software Engineering Project 1 for CSC 510
 
-The Teacher's Pet Bot is a Discord Bot for class instructors to streamline their Discord servers. Discord is a great tool for communication and its functionalities can be enhanced by bots and integrations. There are many tools for organizing classes, but they are often hard to manage. They rarely have good communication mechanisms or ability to connect with other tools. This bot allows instructors to host their classes on Discord, combining communication tools with functionality for assignments, scheduling, and office hours. Instructors and students no longer have to go between platforms to view course details, forums, events, calls, and more.
+Teacher's Pet is a Discord Bot for class instructors to streamline their Discord servers. Discord is a great tool for communication and its functionalities can be enhanced by bots and integrations. There are many tools for organizing classes, but they are often hard to manage. They rarely have good communication mechanisms or ability to connect with other tools. This bot allows instructors to host their classes on Discord, combining communication tools with functionality for assignments, scheduling, and office hours. Instructors and students no longer have to go between platforms to view course details, forums, events, calls, and more.
 
 ### Bot Commands
+`!setInstructor @<member>`
 
+`!ask "<>"`
 
 ### Installation and Running
 
@@ -32,7 +34,9 @@ When Teacher's Pet has been added to a new server as a bot, it will do the follo
 * Create a #q-and-a channel if one doesn't already exist
 * Create a #calendar channel if one doesn't already exist
 
-In addition to this auto-set up, There is also a command which allows a user with the Instructor role to give the same role to another user. This command will only work for users with the Instructor role already (for example, the guild owner).
+In addition to this auto-set up, there is also a command which allows a user with the Instructor role to give the same role to another user. This command will only work for users with the Instructor role already (for example, the guild owner).
+
+![alt text](https://github.com/shikhanair/TeachersPetBot/blob/main/images/bot_join.png)
 
 #### Q&A
 The Q&A functionality allow students to ask and answer questions anonymously. The questions are numbered and when answers are sent, they are combined with the question so they can be easily found. Answers are also marked with `Student Ans` and `Instructor Ans` to distinguish between the sources.  
