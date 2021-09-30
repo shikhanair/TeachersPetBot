@@ -34,8 +34,7 @@ def update_calendar():
     # which is the date, we are comparing as strings but still works for ordering events by date
     # do this for the events we care about in the calendar 'assignments and exams'
     assignments = []
-    for title, link, desc, date, due_hr, due_min in
-        db.select_query(
+    for title, link, desc, date, due_hr, due_min in db.select_query(
             'SELECT ' +
                 'title, link, desc, date, due_hr, due_min ' +
             'FROM ' +
