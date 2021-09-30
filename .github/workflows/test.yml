@@ -28,6 +28,12 @@ jobs:
     - name: Lint with pylint
       run: |
         pylint src
+    - name: Create env file
+      run: |
+        cat << EOF > .env
+        DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
+        TESTING_BOT_TOKEN=${{ secrets.TESTING_BOT_TOKEN }}
+        EOF
 #     - name: Test with pytest
 #       run: |
 #         pytest
