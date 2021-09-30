@@ -22,8 +22,8 @@ QNA = {}
 ###########################
 class QuestionsAnswers:
     ''' Class containing needed question/answer information and identification '''
-    def __init__(self, q, number, message, ans):
-        self.question = q
+    def __init__(self, qs, number, message, ans):
+        self.question = qs
         self.number = number
         self.msg = message
         self.answer = ans
@@ -38,13 +38,13 @@ class QuestionsAnswers:
 # Outputs:
 #      - User question in new post
 ###########################
-async def question(ctx, q):
+async def question(ctx, qs):
     ''' add a question '''
     global QNA
     global QUESTION_NUMBER
 
     # format question
-    q_str = 'Q' + str(QUESTION_NUMBER) + ': ' + q + '\n'
+    q_str = 'Q' + str(QUESTION_NUMBER) + ': ' + qs + '\n'
 
     message = await ctx.send(q_str)
 

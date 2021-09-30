@@ -10,8 +10,8 @@ def connect():
     try:
         CON = sqlite3.connect(db_path)
         print("Connection to SQLite DB successful")
-    except Error as e:
-        print(f"The error '{e}' occurred when trying to connect to SQLite database")
+    except Error as err:
+        print(f"The error '{err}' occurred when trying to connect to SQLite database")
 
 
 def select_query(sql, args=()):

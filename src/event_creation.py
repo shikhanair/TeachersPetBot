@@ -196,8 +196,8 @@ async def create_event(ctx, testing_mode):
 
             # instr_select_interaction = await BOT.wait_for('select_option')
             # instructor = instr_select_interaction.values[0]
-            instructor = (await BOT.wait_for('message')).content if testing_mode
-                else (await BOT.wait_for('select_option')).values[0]
+            instructor = ((await BOT.wait_for('message')).content
+                if testing_mode else (await BOT.wait_for('select_option')).values[0])
 
             await ctx.send(
                 'Which day would you like the office hour to be on?',
