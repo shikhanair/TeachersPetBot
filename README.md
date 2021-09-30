@@ -3,13 +3,12 @@
   
 <h2 align="center"> Streamline Your Class Discord</h1>
 
+
 ![Python](https://img.shields.io/badge/python-v3.7+-brightgreen.svg)
 ![GitHub](https://img.shields.io/github/license/shikhanair/TeachersPetBot)
 ![GitHub issues](https://img.shields.io/github/issues/shikhanair/TeachersPetBot)
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/shikhanair/TeachersPetBot)
-
 ![Lines of code](https://img.shields.io/tokei/lines/github/shikhanair/TeachersPetBot)
-
 [![codecov](https://codecov.io/gh/shikhanair/TeachersPetBot/branch/main/graph/badge.svg?token=ZQUQ8UC2Y6)](https://codecov.io/gh/shikhanair/TeachersPetBot)
 
 Software Engineering Project 1 for CSC 510
