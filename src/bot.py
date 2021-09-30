@@ -26,6 +26,10 @@ intents=discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', intents=intents)
 
+###########################
+# Function: on_ready
+# Description: run on bot start-up
+###########################
 @bot.event
 async def on_ready():
     global testing_mode
@@ -78,16 +82,24 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
+###########################
+# Function: on_guild_join
+# Description: run when a user joins a guild with the bot present
+# Inputs:
+#      - guild: the guild the user joined from
+###########################
 @bot.event
 async def on_guild_join(guild):
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
-            await channel.send('Hi there, I\'m TeachersPetBot, and I\'m here to help you manage your class discord! Let\'s do some quick setup.')
+            await channel.send('Hi there, I\'m TeachersPetBot, and I\'m here' +
+                'to help you manage your class discord! Let\'s do some quick setup.')
             #create roles if they don't exist
             if 'Instructor' in guild.roles:
                 await channel.send("Instructor Role already exists")
             else:
-                await guild.create_role(name="Instructor", colour=discord.Colour(0x0062ff), permissions=discord.Permissions.all())
+                await guild.create_role(name="Instructor", colour=discord.Colour(0x0062ff),
+                                        permissions=discord.Permissions.all())
             #Assign Instructor role to admin
             leader = guild.owner
             leadrole = get(guild.roles, name='Instructor')
@@ -107,9 +119,14 @@ async def on_guild_join(guild):
 
         break
 
+###########################
+# Function: on_message
+# Description: run when a message is sent to a discord the bot occupies
+# Inputs:
+#      - message: the message the user sent to a channel
+###########################
 @bot.event
 async def on_message(message):
-
     # allow messages from test bot
     if message.author.bot and message.author.id == 889697640411955251:
         ctx = await bot.get_context(message)
@@ -118,8 +135,9 @@ async def on_message(message):
     if message.author == bot.user:
         return
 
-    if(profanity.check_profanity(message.content)):
-        await message.channel.send(message.author.name + ' says: ' + profanity.censor_profanity(message.content))
+    if profanity.check_profanity(message.content):
+        await message.channel.send(message.author.name + ' says: ' +
+            profanity.censor_profanity(message.content))
         await message.delete()
 
     await bot.process_commands(message)
@@ -128,13 +146,28 @@ async def on_message(message):
         response = 'hey yourself ;)'
         await message.channel.send(response)
 
+###########################
+# Function: on_message_edit
+# Description: run when a user edits a message
+# Inputs:
+#      - before: the old message
+#      - after: the new message
+###########################
 @bot.event
 async def on_message_edit(before, after):
     if profanity.check_profanity(after.content):
-        await after.channel.send(after.author.name + ' says: ' + profanity.censor_profanity(after.content))
+        await after.channel.send(after.author.name + ' says: ' +
+            profanity.censor_profanity(after.content))
         await after.delete()
 
-
+###########################
+# Function: test
+# Description: Simple test command that shows commands are working.
+# Inputs:
+#      - ctx: context of the command
+# Outputs:
+#      - Sends test successful message back to channel that called test
+###########################
 @bot.command()
 async def test(ctx):
     await ctx.send('test successful')
@@ -160,7 +193,6 @@ async def setInstructor(ctx, member:discord.Member):
 @commands.has_role('Instructor')
 async def create_event(ctx):
     await event_creation.create_event(ctx, testing_mode)
-
 
 ###########################
 # Function: oh
@@ -194,7 +226,6 @@ async def ask_question(ctx, question):
         await ctx.author.send('Please send questions to the #q-and-a channel.')
         await ctx.message.delete()
 
-
 ###########################
 # Function: answer
 # Description: command to answer question and sends to qna module
@@ -214,7 +245,12 @@ async def answer_question(ctx, q_num, answer):
         await ctx.author.send('Please send answers to the #q-and-a channel.')
         await ctx.message.delete()
 
-
+###########################
+# Function: begin_tests
+# Description: Start the automated testing
+# Inputs:
+#      - ctx: context of the command
+###########################
 @bot.command('begin-tests')
 async def begin_tests(ctx):
     global testing_mode
@@ -230,21 +266,29 @@ async def begin_tests(ctx):
 
     await office_hours.open_oh(ctx.guild, 'test')
 
-
+###########################
+# Function: end_tests
+# Description: Finalize automated testing
+# Inputs:
+#      - ctx: context of the command
+###########################
 @bot.command('end-tests')
 async def end_tests(ctx):
     if ctx.author.id != 889697640411955251:
         return
 
     await office_hours.close_oh(ctx.guild, 'test')
-    
+
     # TODO maybe use ctx.bot.logout()
     await ctx.bot.close()
     # quit(0)
 
-
 if __name__ == '__main__':
     bot.run(TOKEN)
 
+###########################
+# Function: test_dummy
+# Description: Run the bot
+###########################
 def test_dummy():
     bot.run(TOKEN)
