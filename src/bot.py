@@ -31,6 +31,7 @@ bot = commands.Bot(command_prefix='!', description='This is TeachersPetBot!', in
 ###########################
 @bot.event
 async def on_ready():
+    ''' run on bot start-up '''
     global TESTING_MODE
     TESTING_MODE = False
 
@@ -89,6 +90,7 @@ async def on_ready():
 ###########################
 @bot.event
 async def on_guild_join(guild):
+    ''' run on member joining guild '''
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
             await channel.send('Hi there, I\'m TeachersPetBot, and I\'m here' +
@@ -126,6 +128,7 @@ async def on_guild_join(guild):
 ###########################
 @bot.event
 async def on_message(message):
+    ''' run on message sent to a channel '''
     # allow messages from test bot
     if message.author.bot and message.author.id == 889697640411955251:
         ctx = await bot.get_context(message)
@@ -154,6 +157,7 @@ async def on_message(message):
 ###########################
 @bot.event
 async def on_message_edit(before, after):
+    ''' run on message edited '''
     if profanity.check_profanity(after.content):
         await after.channel.send(after.author.name + ' says: ' +
             profanity.censor_profanity(after.content))
@@ -169,11 +173,22 @@ async def on_message_edit(before, after):
 ###########################
 @bot.command()
 async def test(ctx):
+    ''' simple sanity check '''
     await ctx.send('test successful')
 
+###########################
+# Function: set_instructor
+# Description: Command used to give Instructor role out by instructors
+# Inputs:
+#      - ctx: context of the command
+#      - member: user to give role
+# Outputs:
+#      - Sends confirmation back to channel
+###########################
 @bot.command()
 @commands.has_role('Instructor')
 async def set_instructor(ctx, member:discord.Member):
+    ''' set instructor role command '''
     irole = get(ctx.guild.roles, name='Instructor')
     await member.add_roles(irole, reason=None, atomic=True)
     await ctx.channel.send(member.name + " has been given Instructor role!")
@@ -191,6 +206,7 @@ async def set_instructor(ctx, member:discord.Member):
 # @commands.dm_only()
 @commands.has_role('Instructor')
 async def create_event(ctx):
+    ''' run event creation interface '''
     await event_creation.create_event(ctx, TESTING_MODE)
 
 ###########################
@@ -205,6 +221,7 @@ async def create_event(ctx):
 ###########################
 @bot.command(name='oh', help='Operations relevant for office hours.')
 async def office_hour_command(ctx, command, *args):
+    ''' run office hour commands with various args '''
     await office_hours.office_hour_command(ctx, command, *args)
 
 ###########################
@@ -218,6 +235,7 @@ async def office_hour_command(ctx, command, *args):
 ###########################
 @bot.command(name='ask', help='Ask question. Please put question text in quotes.')
 async def ask_question(ctx, question):
+    ''' ask question command '''
     # make sure to check that this is actually being asked in the Q&A channel
     if ctx.channel.name == 'q-and-a':
         await qna.question(ctx, question)
@@ -237,6 +255,7 @@ async def ask_question(ctx, question):
 ###########################
 @bot.command(name='answer', help='Answer specific question. Please put answer text in quotes.')
 async def answer_question(ctx, q_num, answer):
+    ''' answer question command '''
     # make sure to check that this is actually being asked in the Q&A channel
     if ctx.channel.name == 'q-and-a':
         await qna.answer(ctx, q_num, answer)
@@ -252,6 +271,7 @@ async def answer_question(ctx, q_num, answer):
 ###########################
 @bot.command('begin-tests')
 async def begin_tests(ctx):
+    ''' start test command '''
     global TESTING_MODE
 
     if ctx.author.id != 889697640411955251:
@@ -266,14 +286,15 @@ async def begin_tests(ctx):
 
     await office_hours.open_oh(ctx.guild, 'test')
 
-'''
-    Function: end_tests
-    Description: Finalize automated testing
-    Inputs:
-        - ctx: context of the command
-'''
+###########################
+# Function: end_tests
+# Description: Finalize automated testing
+# Inputs:
+#      - ctx: context of the command
+###########################
 @bot.command('end-tests')
 async def end_tests(ctx):
+    ''' end tests command '''
     if ctx.author.id != 889697640411955251:
         return
 
@@ -291,4 +312,5 @@ if __name__ == '__main__':
 # Description: Run the bot
 ###########################
 def test_dummy():
+    ''' run bot command '''
     bot.run(TOKEN)
