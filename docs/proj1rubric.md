@@ -15,7 +15,7 @@ Total Points from Self-Assessment:
 |Docs: short video, animated, hosted on your repo. That convinces people why they want to work on your code.|
 | Use of version control tools|3 |
 |Use of  style checkers | |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
-| Use of code  formatters. ||[black configuration](https://github.com/shikhanair/TeachersPetBot/blob/main/pyproject.toml)|
+| Use of code  formatters. | |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
 | Use of syntax checkers. | |[pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc)|
 | Use of code coverage ||
 | other automated analysis tools||
