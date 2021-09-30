@@ -99,11 +99,9 @@ async def init(b):
     
     bot = b
     for guild in bot.guilds:
-        flag = False
         for channel in guild.text_channels:
             if(channel.name == 'course-calendar'):
-                flag = True
+                await channel.delete()
         
-        if(flag == False):
-            channel = await guild.create_text_channel('course-calendar')
-            await display_events(channel)
+        channel = await guild.create_text_channel('course-calendar')
+        await display_events(channel)
