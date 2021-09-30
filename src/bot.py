@@ -173,7 +173,7 @@ async def test(ctx):
 
 @bot.command()
 @commands.has_role('Instructor')
-async def setInstructor(ctx, member:discord.Member):
+async def set_instructor(ctx, member:discord.Member):
     irole = get(ctx.guild.roles, name='Instructor')
     await member.add_roles(irole, reason=None, atomic=True)
     await ctx.channel.send(member.name + " has been given Instructor role!")
@@ -266,12 +266,12 @@ async def begin_tests(ctx):
 
     await office_hours.open_oh(ctx.guild, 'test')
 
-###########################
-# Function: end_tests
-# Description: Finalize automated testing
-# Inputs:
-#      - ctx: context of the command
-###########################
+'''
+    Function: end_tests
+    Description: Finalize automated testing
+    Inputs:
+        - ctx: context of the command
+'''
 @bot.command('end-tests')
 async def end_tests(ctx):
     if ctx.author.id != 889697640411955251:
