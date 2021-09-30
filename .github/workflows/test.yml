@@ -31,3 +31,9 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+    - name: Run tests and collect coverage
+      run: |
+        coverage run bot.py
+        coverage xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
