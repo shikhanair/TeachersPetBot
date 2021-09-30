@@ -81,9 +81,13 @@ def update_calendar():
             i += 1
     
     # add the built strings to the embed
-    calendar_embed.add_field(name="Past Events", value=past_events, inline=True)
+    if past_events != '':
+        calendar_embed.add_field(name="Past Events", value=past_events, inline=True)
+    
     #calendar_embed.add_field(name="Current Events", value=events, inline=False)
-    calendar_embed.add_field(name="Coming up", value=future_events, inline=True)
+    
+    if future_events != '':
+        calendar_embed.add_field(name="Coming up", value=future_events, inline=True)
     
     # mark the time that this was done for both creation and editing
     # NOTE - we put in EST because we are EST
