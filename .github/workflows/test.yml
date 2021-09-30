@@ -28,6 +28,12 @@ jobs:
     - name: Lint with pylint
       run: |
         pylint src
-    - name: Test with pytest
+#     - name: Test with pytest
+#       run: |
+#         pytest
+    - name: Run tests and collect coverage
       run: |
-        pytest
+        (sleep 2; python3 test/tests.py) & (coverage run --source=./src -m pytest src/bot.py)
+        coverage xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
