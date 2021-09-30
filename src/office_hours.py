@@ -40,7 +40,7 @@ class OfficeHourQueue:
     # Outputs: None
     ###########################
     def enqueue(self, student):
-        self.queue.append(Group(student, '{:03d}'.format(self.next_grp_id)))
+        self.queue.append(Group(student, f'{self.next_grp_id:03d}'))
         self.next_grp_id = (self.next_grp_id + 1) % 1000
 
     ###########################
