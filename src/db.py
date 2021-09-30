@@ -2,23 +2,26 @@ import sqlite3
 from sqlite3 import Error
 import os
 
-con = None
+CON = None
 def connect():
-    global con
+    ''' connect program to database file db.sqlite '''
+    global CON
     db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'db.sqlite')
     try:
-        con = sqlite3.connect(db_path)
+        CON = sqlite3.connect(db_path)
         print("Connection to SQLite DB successful")
     except Error as e:
         print(f"The error '{e}' occurred when trying to connect to SQLite database")
 
 
 def select_query(sql, args=()):
-    cur = con.cursor()
+    ''' select query to return items from database '''
+    cur = CON.cursor()
     return cur.execute(sql, args)
 
 
 def mutation_query(sql, args=()):
-    cur = con.cursor()
+    ''' do a mutation on the database '''
+    cur = CON.cursor()
     cur.execute(sql, args)
-    con.commit()
+    CON.commit()

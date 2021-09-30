@@ -74,8 +74,8 @@ async def create_event(ctx, testing_mode):
             ],
         )
 
-        button_clicked = (await BOT.wait_for('message')).content
-            if testing_mode else (await BOT.wait_for('button_click')).custom_id
+        button_clicked = (await BOT.wait_for('message')).content if testing_mode else
+            (await BOT.wait_for('button_click')).custom_id
         if button_clicked == 'assignment':
             await ctx.send('What would you like the assignment to be called')
             msg = await BOT.wait_for('message', check=lambda m: m.author == command_invoker)
