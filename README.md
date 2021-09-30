@@ -100,6 +100,8 @@ Once the instructor is ready to help the next student in the queue, they may ent
 
 Using the Python package better-profanity, Teacher's Pet will catch profane words sent by members of the guild, delete the message, and re-send the exact message with the bad word(s) censored out. It will also catch profane words in messages which have been edited to incude bad words. This package supports censoring based off any non-alphabetical word dividers and swears with custom characters. NOTE: Currently the Bot does not censor swears which have had extra alphabetical characters added.
 
+![alt text](https://github.com/shikhanair/TeachersPetBot/blob/main/images/profanity_example.PNG)
+
 <h2 align="center"> Future Scope </h2>
 
 This bot has endless possibilities for functionality. Features which we are interested in adding but did not have time for include but are not limited to:
