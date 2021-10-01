@@ -2,7 +2,7 @@
 <h1 align="center"> Teacher's Pet </h1>
   
 <h2 align="center"> Streamline Your Class Discord</h1>
-[![Watch the video](https://app.animaker.com/animo/LV3WwYYGqInFMPdC/](https://app.animaker.com/animo/LV3WwYYGqInFMPdC/)
+![Watch the video](https://app.animaker.com/animo/LV3WwYYGqInFMPdC/](https://app.animaker.com/animo/LV3WwYYGqInFMPdC/)
 
 
 ![Python](https://img.shields.io/badge/python-v3.7+-brightgreen.svg)
