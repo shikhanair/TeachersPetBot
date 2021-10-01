@@ -14,7 +14,7 @@
 [![codecov](https://codecov.io/gh/shikhanair/TeachersPetBot/branch/main/graph/badge.svg?token=ZQUQ8UC2Y6)](https://codecov.io/gh/shikhanair/TeachersPetBot)
 
   Click Below to Watch Our Video!
-[![Watch the video](https://github.com/shikhanair/TeachersPetBot/blob/main/images/teacherspetbot.png)](https://app.animaker.com/animo/LV3WwYYGqInFMPdC/)
+[![Watch the video](https://github.com/shikhanair/TeachersPetBot/blob/main/images/teacherspetbot.png)](https://youtu.be/tExF88LHqgE)
   
   
 
