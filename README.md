@@ -14,7 +14,7 @@
 [![codecov](https://codecov.io/gh/shikhanair/TeachersPetBot/branch/main/graph/badge.svg?token=ZQUQ8UC2Y6)](https://codecov.io/gh/shikhanair/TeachersPetBot)
 
   Click Below to Watch Our Video!
-[![Watch the video](https://github.com/shikhanair/TeachersPetBot/blob/main/images/teacherspetbot.png)](https://youtu.be/tExF88LHqgE)
+[![Watch the video](https://github.com/shikhanair/TeachersPetBot/blob/main/images/teacherspetbot.png)](https://app.animaker.com/animo/LV3WwYYGqInFMPdC/)
   
   
 
@@ -92,14 +92,56 @@ The calendar is updated at the creation of any new event that gets displayed on 
 ### Office Hours
 The bot contains functionality for handling TA office hours. After a TA office hour event is added and it is time for a TA's office hour to open, the bot will automatically create office hour channels in the server, allowing students to enter the office hour queue and instructors to help students based on the queue. Once the closing time for the office hour is reached, the channels related to the TA's office hour are automatically deleted.
 
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_channels.png)
+
 ##### Entering an office hour (as a student)
 Students may wish to receive individual help from a TA or they may want to join other students for help as a group (when they need help with a group project, etc); TeachersPetBot supports both of these use cases. A student may enter the queue as an individual using the `!oh enter` command within the text channel for an ongoing office hour. Upon doing so, a new group will be created and the student will become the sole member of that group. Student may enter existing groups by inputting `!oh enter <group_id>`, where `group_id` is the ID of the group the student wishes to join (group IDs will be displayed in the queue). Once it is an individual's (or group's) turn to be helped by the instructor, all members of the group will be invited into a voice channel where they will be able to talk with the TA.
+
+Upon entering this command in an office hour channel:
+
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_enter.png)
+
+The queue will look like this:
+
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_lone.png)
+
+Upon entering an existing group, say group '000':
+
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_enter_grp.png)
+
+The queue will look like this:
+
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_group.png)
 
 ##### Exiting the office hour queue (as a student)
 A student may wish to exit the office hour queue for whatever reason; they may do so by typing `!oh exit` in the channel they are in the queue for.
 
+If a student exists in the queue:
+
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_lone.png)
+
+And enters this command:
+
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_exit.png)
+
+The student will be wiped from the queue:
+
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_empty.png)
+
 ##### Traversing the queue (as an instructor)
 Once the instructor is ready to help the next student in the queue, they may enter `!oh next` in the office hour text channel. Upon doing so, DMs will be sent to all group members next in the queue notifying them that it is their turn, and they will be able to enter the office hour voice channel.
+
+If a student exists in the queue:
+
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_lone.png)
+
+And an instructor wishes to help the next student in the queue:
+
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_next.png)
+
+The student will be invited to the instructor's voice channel and the queue will be advanced:
+
+![image](https://github.com/shikhanair/TeachersPetBot/blob/main/images/oh_empty.png)
 
 
 ### Profanity Censoring 
