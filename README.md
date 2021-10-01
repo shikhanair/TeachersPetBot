@@ -1,16 +1,22 @@
 <p align="center"><img src="https://github.com/shikhanair/TeachersPetBot/blob/main/images/teacherspet.png" alt="alt text" width=200 height=200>
-<h1 align="center"> Teacher's Pet </h1>
+  
+  <h1 align="center"> Teacher's Pet </h1>
   
 <h2 align="center"> Streamline Your Class Discord</h1>
-![Watch the video](https://app.animaker.com/animo/LV3WwYYGqInFMPdC/](https://app.animaker.com/animo/LV3WwYYGqInFMPdC/)
 
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5542626.svg)](https://doi.org/10.5281/zenodo.5542626)
 ![Python](https://img.shields.io/badge/python-v3.7+-brightgreen.svg)
 ![GitHub](https://img.shields.io/github/license/shikhanair/TeachersPetBot)
 ![GitHub issues](https://img.shields.io/github/issues/shikhanair/TeachersPetBot)
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/shikhanair/TeachersPetBot)
 ![Lines of code](https://img.shields.io/tokei/lines/github/shikhanair/TeachersPetBot)
 [![codecov](https://codecov.io/gh/shikhanair/TeachersPetBot/branch/main/graph/badge.svg?token=ZQUQ8UC2Y6)](https://codecov.io/gh/shikhanair/TeachersPetBot)
+
+  Click Below to Watch Our Video!
+[![Watch the video](https://github.com/shikhanair/TeachersPetBot/blob/main/images/teacherspetbot.png)](https://app.animaker.com/animo/LV3WwYYGqInFMPdC/)
+  
+  
 
 Software Engineering Project 1 for CSC 510
 
