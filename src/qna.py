@@ -4,10 +4,10 @@
 from discord import NotFound
 
 # keep track of next question number
-question_number = 1
+QUESTION_NUMBER = 1
 
 # dictionary of questions with answers
-qna = {}
+QNA = {}
 
 
 ###########################
@@ -21,8 +21,9 @@ qna = {}
 # Outputs: None
 ###########################
 class QuestionsAnswers:
-    def __init__(self, q, number, message, ans):
-        self.question = q
+    ''' Class containing needed question/answer information and identification '''
+    def __init__(self, qs, number, message, ans):
+        self.question = qs
         self.number = number
         self.msg = message
         self.answer = ans
@@ -37,22 +38,22 @@ class QuestionsAnswers:
 # Outputs:
 #      - User question in new post
 ###########################
-async def question(ctx, q):
-    global qna
-    global question_number
+async def question(ctx, qs):
+    ''' add a question '''
+    global QUESTION_NUMBER
 
     # format question
-    q_str = 'Q' + str(question_number) + ': ' + q + '\n'
+    q_str = 'Q' + str(QUESTION_NUMBER) + ': ' + qs + '\n'
 
     message = await ctx.send(q_str)
 
-    # create qna object
-    new_question = QuestionsAnswers(q, question_number, message.id, '')
+    # create QNA object
+    new_question = QuestionsAnswers(qs, QUESTION_NUMBER, message.id, '')
     # add question to list
-    qna[question_number] = new_question
+    QNA[QUESTION_NUMBER] = new_question
 
     # increment question number for next question
-    question_number += 1
+    QUESTION_NUMBER += 1
 
     # delete original question
     await ctx.message.delete()
@@ -69,17 +70,17 @@ async def question(ctx, q):
 #      - User answer added to question post
 ###########################
 async def answer(ctx, num, ans):
-    global qna
+    ''' answer the specific question '''
 
     # check if question number exists
-    if int(num) not in qna.keys():
+    if int(num) not in QNA.keys():
         await ctx.author.send('Invalid question number: ' + str(num))
         # delete user msg
         await ctx.message.delete()
         return
 
     # get question
-    q_answered = qna[int(num)]
+    q_answered = QNA[int(num)]
     # check if message exists
     try:
         message = await ctx.fetch_message(q_answered.msg)

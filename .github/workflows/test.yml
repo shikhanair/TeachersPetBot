@@ -28,12 +28,18 @@ jobs:
     - name: Lint with pylint
       run: |
         pylint src
-    - name: Test with pytest
+    - name: Create env file
       run: |
-        pytest
+        cat << EOF > .env
+        DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
+        TESTING_BOT_TOKEN=${{ secrets.TESTING_BOT_TOKEN }}
+        EOF
+#     - name: Test with pytest
+#       run: |
+#         pytest
     - name: Run tests and collect coverage
       run: |
-        coverage run bot.py
+        (sleep 2; python3 test/tests.py) & (coverage run --source=./src -m pytest src/bot.py)
         coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2

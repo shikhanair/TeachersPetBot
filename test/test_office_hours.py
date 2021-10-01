@@ -1,4 +1,4 @@
-from utils import wait_for_msg
+from utils import wait_for_msg, wait_for_channel_create
 
 async def get_queue(testing_bot, oh_channel):
     bot_queue_resp = await wait_for_msg(testing_bot, oh_channel, 'Queue')
@@ -18,7 +18,7 @@ async def test_oh_queue_individ(testing_bot, oh_channel):
 
 
 async def test(testing_bot, guild_id):
-    oh_channel = await testing_bot.wait_for('guild_channel_create', timeout=3, check=lambda x: x.guild.id == guild_id and 'office-hour-test' in x.name)
+    oh_channel = await wait_for_channel_create(testing_bot, guild_id, 'office-hour-test')
     await wait_for_msg(testing_bot, oh_channel, "Welcome to test's office hour!")
     
     await test_oh_queue_individ(testing_bot, oh_channel)

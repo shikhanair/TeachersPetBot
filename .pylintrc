@@ -152,7 +152,20 @@ disable=print-statement,
         xreadlines-attribute,
         deprecated-sys-function,
         exception-escape,
-        comprehension-escape
+        comprehension-escape,
+        C0114, # Missing module docstring (missing-module-docstring)
+        C0115,
+        C0116,
+        W0603, # Using the global statement (global-statement)
+        W0511, # TODO maybe use ctx.bot.logout() (fixme)
+        W0613, # Unused argument 'before' (unused-argument)
+        C0103, # Variable name "t" doesn't conform to snake_case naming style (invalid-name)
+        R0902,
+        R0914, # Too many local variables (23/15) (too-many-locals)
+        R0911, # Too many return statements (7/6) (too-many-return-statements)
+        R0912, # Too many branches (17/12) (too-many-branches)
+        R0915, # Too many statements (85/50) (too-many-statements)
+        R0903 # Too few public methods (0/2) (too-few-public-methods)
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

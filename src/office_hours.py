@@ -17,7 +17,6 @@ class Group:
         self.group_members = [student]
         self.group_id = group_id
 
-
 ###########################
 # Class: OfficeHourQueue
 # Description: contains information about an office hour queue
@@ -32,7 +31,7 @@ class OfficeHourQueue:
         self.voice_channel = voice_channel
         self.waiting_room = waiting_room
         self.next_grp_id = 0
-    
+
     ###########################
     # Method: enqueue
     # Description: adds a student to the office hour queue
@@ -41,7 +40,7 @@ class OfficeHourQueue:
     # Outputs: None
     ###########################
     def enqueue(self, student):
-        self.queue.append(Group(student, '{:03d}'.format(self.next_grp_id)))
+        self.queue.append(Group(student, f'{self.next_grp_id:03d}'))
         self.next_grp_id = (self.next_grp_id + 1) % 1000
 
     ###########################
@@ -65,7 +64,6 @@ class OfficeHourQueue:
             ('\n'.join(lines) if len(lines) != 0 else '(The queue is currently empty)')
         )
         self.prev_queue_message = await self.text_channel.send(queue_str)
-
 
 ###########################
 # Function: office_hour_command
@@ -94,23 +92,30 @@ async def office_hour_command(ctx, command, *args):
                     await office_hour_queue.display_queue()
                 elif len(args) == 1:
                     group_id_to_join = args[0]
-                    group_to_join = next((group for group in queue if group_id_to_join == group.group_id), None)
+                    group_to_join = next((group for group in queue if
+                        group_id_to_join == group.group_id), None)
                     if group_to_join:
                         group_to_join.group_members.append(ctx.author)
                         await office_hour_queue.display_queue()
                     else:
                         await ctx.author.send(
                             'The office hour group you have attempted to join does not exist. '
-                            'Please ensure you enter a valid group ID when attempting to join an office hour group.'
+                            'Please ensure you enter a valid group ID when attempting to '
+                            'join an office hour group.'
                         )
-                await office_hour_queue.waiting_room.set_permissions(ctx.author, read_messages=True, send_messages=True)
+                await office_hour_queue.waiting_room.set_permissions(
+                    ctx.author, read_messages=True, send_messages=True)
             else:
                 await ctx.author.send(
                     'You are already in the office hour queue so you cannot join again. '
-                    'If you would like to join an office hour group, please exit the queue and join the group.'
+                    'If you would like to join an office hour group, please exit the queue '
+                    'and join the group.'
                 )
         elif command == 'exit' and not is_instructor:
-            queued_group = next((group for group in queue if ctx.author in group.group_members), None)
+            queued_group = next(
+                (group for group in queue if ctx.author in group.group_members),
+                None
+            )
             if queued_group:
                 queued_group.group_members.remove(ctx.author)
                 if len(queued_group.group_members) == 0:
@@ -122,21 +127,27 @@ async def office_hour_command(ctx, command, *args):
             waiting_room = office_hour_queue.waiting_room
 
             if office_hour_queue.current_student:
-                await voice_channel.set_permissions(office_hour_queue.current_student, overwrite=None)
+                await voice_channel.set_permissions(
+                    office_hour_queue.current_student,
+                    overwrite=None
+                )
 
             next_group = queue.pop(0)
             for member in next_group.group_members:
                 await voice_channel.set_permissions(member, read_messages=True, send_messages=True)
                 await waiting_room.set_permissions(member, overwrite=None)
 
-                message = f"{office_hour_queue.ta_name} is ready to help {'you' if len(next_group.group_members) == 1 else 'your group'}. Please join the office hour voice channel."
+                message = (
+                    f'{office_hour_queue.ta_name} is ready to help '
+                    f"{'you' if len(next_group.group_members) == 1 else 'your group'}."
+                    'Please join the office hour voice channel.'
+                )
                 await member.send(message)
             await office_hour_queue.display_queue()
     else:
         await ctx.author.send('The `!oh` command is only valid in office hour text channels.')
 
     await ctx.message.delete()
-
 
 ###########################
 # Function: open_oh
@@ -157,8 +168,10 @@ async def open_oh(guild, ta):
 
     ta_name_channelified = ta.lower().replace(" ", "-")
     text_channel = await category.create_text_channel(f'office-hour-{ta_name_channelified}')
-    voice_channel = await category.create_voice_channel(f'office-hour-{ta_name_channelified}', overwrites=overwrites)
-    waiting_room = await category.create_voice_channel(f'office-hour-{ta_name_channelified}-waiting-list', overwrites=overwrites)
+    voice_channel = await category.create_voice_channel(
+        f'office-hour-{ta_name_channelified}', overwrites=overwrites)
+    waiting_room = await category.create_voice_channel(
+        f'office-hour-{ta_name_channelified}-waiting-list', overwrites=overwrites)
 
     await text_channel.send(
         f"Welcome to {ta}'s office hour!\n"
@@ -169,8 +182,8 @@ async def open_oh(guild, ta):
         "while you wait for your turn if you'd like. When it is your turn, you will be notified."
     )
 
-    office_hour_queues[ta_name_channelified] = OfficeHourQueue(ta, text_channel, voice_channel, waiting_room)
-
+    office_hour_queues[ta_name_channelified] = OfficeHourQueue(ta, text_channel, voice_channel,
+        waiting_room)
 
 ###########################
 # Function: close_oh
@@ -183,9 +196,12 @@ async def open_oh(guild, ta):
 async def close_oh(guild, ta):
     ta_name_channelified = ta.lower().replace(" ", "-")
     channels_to_delete = [
-        next((chan for chan in guild.text_channels if chan.name == f'office-hour-{ta_name_channelified}'), None),
-        next((chan for chan in guild.voice_channels if chan.name == f'office-hour-{ta_name_channelified}'), None),
-        next((chan for chan in guild.voice_channels if chan.name == f'office-hour-{ta_name_channelified}-waiting-list'), None),
+        next((chan for chan in guild.text_channels if chan.name ==
+            f'office-hour-{ta_name_channelified}'), None),
+        next((chan for chan in guild.voice_channels if chan.name ==
+            f'office-hour-{ta_name_channelified}'), None),
+        next((chan for chan in guild.voice_channels if chan.name ==
+            f'office-hour-{ta_name_channelified}-waiting-list'), None),
         next((cat for cat in guild.categories if cat.name == f'Office Hour {ta}'), None)
     ]
 
@@ -194,7 +210,6 @@ async def close_oh(guild, ta):
             await channel.delete()
 
     office_hour_queues.pop(ta_name_channelified)
-
 
 ###########################
 # Class: TaOfficeHour
@@ -206,10 +221,9 @@ class TaOfficeHour:
         self.day = day
         self.times = times
 
-
 ###########################
 # Function: check_office_hour_loop
-# Description: function that runs intermittently to open or close office hours based on the current time
+# Description: runs intermittently to open or close office hours based on the current time
 ###########################
 @tasks.loop(seconds=5)
 async def check_office_hour_loop():
@@ -223,11 +237,11 @@ async def check_office_hour_loop():
             if curr_day == day:
                 begin_time, end_time = office_hour.times
                 ta_name_channelified = office_hour.ta.lower().replace(" ", "-")
-                if begin_time <= curr_time <= end_time and ta_name_channelified not in office_hour_queues:
+                if begin_time <= curr_time <= end_time and \
+                    ta_name_channelified not in office_hour_queues:
                     await open_oh(guild, office_hour.ta)
                 elif curr_time > end_time and ta_name_channelified in office_hour_queues:
                     await close_oh(guild, office_hour.ta)
-
 
 ###########################
 # Function: add_office_hour
@@ -240,7 +254,9 @@ async def check_office_hour_loop():
 def add_office_hour(guild, ta_office_hour):
     all_guilds_ta_office_hours[guild.id].append(ta_office_hour)
 
-
+bot = None
+all_guilds_ta_office_hours = None
+office_hour_queues = None
 ###########################
 # Function: init
 # Description: initializes office hours module
@@ -257,9 +273,11 @@ def init(b):
     bot = b
     for guild in bot.guilds:
         ta_office_hours = [
-            TaOfficeHour(ta, day, (time(hour=begin_hr, minute=begin_min), time(hour=end_hr, minute=end_min)))
-            for ta, day, begin_hr, begin_min, end_hr, end_min
-            in db.select_query('SELECT ta, day, begin_hr, begin_min, end_hr, end_min FROM ta_office_hours WHERE guild_id = ?', [guild.id])
+            TaOfficeHour(ta, day, (time(hour=begin_hr, minute=begin_min),
+                time(hour=end_hr, minute=end_min)))
+            for ta, day, begin_hr, begin_min, end_hr, end_min in db.select_query(
+                'SELECT ta, day, begin_hr, begin_min, end_hr, end_min '
+                'FROM ta_office_hours WHERE guild_id = ?', [guild.id])
         ]
 
         all_guilds_ta_office_hours[guild.id] = ta_office_hours
