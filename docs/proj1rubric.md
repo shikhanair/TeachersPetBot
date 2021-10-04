@@ -54,29 +54,29 @@ Total Points from Self-Assessment: 135
 | Does your project have a ticketing system to manage bug reports and feature requests? | 3 |
 | Is your project's ticketing system publicly visible to your users, so they can view bug reports and feature requests? | 3|
 | Is your software’s architecture and design modular? * |  |  |
-| Does your software use an accepted coding standard or convention? * |  |  |
+| Does your software use an accepted coding standard or convention? | 3 | [Pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc) |
 | Does your software allow data to be imported and exported using open data formats? * |  |  |
 | Does your software allow communications using open communications protocols? * |  |  |
 | Is your software cross-platform compatible? * |  |  |
 | Does your software adhere to appropriate accessibility conventions or standards? * |  |  |
 | Does your documentation adhere to appropriate accessibility conventions or standards? * |  |  |
-| Is your source code stored in a repository under revision control? * |  |  |
+| Is your source code stored in a repository under revision control? | 3 |  |
 | Is each source code release a snapshot of the repository? * |  |  |
 | Are releases tagged in the repository? * |  |  |
 | Is there a branch of the repository that is always stable? (i.e. tests always pass, code always builds successfully) * |  |  |
 | Do you back-up your repository? * |  |  |
-| Do you provide publicly-available instructions for building your software from the source code? * |  |  |
+| Do you provide publicly-available instructions for building your software from the source code? | 3 | [Installation/Testing guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md) |
 | Can you build, or package, your software using an automated tool? * |  |  |
-| Do you provide publicly-available instructions for deploying your software? * |  |  |
-| Does your documentation list all third-party dependencies? * |  |  |
-| Does your documentation list the version number for all third-party dependencies? * |  |  |
+| Do you provide publicly-available instructions for deploying your software? | 3 | [Installation/Testing guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md) |
+| Does your documentation list all third-party dependencies? | 3 | [requirements.txt](https://github.com/shikhanair/TeachersPetBot/blob/main/requirements.txt) |
+| Does your documentation list the version number for all third-party dependencies? | 3 | [requirements.txt](https://github.com/shikhanair/TeachersPetBot/blob/main/requirements.txt) |
 | Does your software list the web address, and licences for all third-party dependencies and say whether the dependencies are mandatory or optional? * |  |  |
 | Can you download dependencies using a dependency management tool or package manager? * |  |  |
-| Do you have tests that can be run after your software has been built or deployed to show whether the build or deployment has been successful? * |  |  |
-| Do you have an automated test suite for your software? * |  |  |
-| Do you have a framework to periodically (e.g. nightly) run your tests on the latest version of the source code? * |  |  |
-| Do you use continuous integration, automatically running tests whenever changes are made to your source code? * |  |  |
-| Are your test results publicly visible? * |  |  |
+| Do you have tests that can be run after your software has been built or deployed to show whether the build or deployment has been successful? | 3 | [Installation/Testing guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md) |
+| Do you have an automated test suite for your software? | 3 | [Installation/Testing guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md) |
+| Do you have a framework to periodically (e.g. nightly) run your tests on the latest version of the source code? | 3 | [Github Actions](https://github.com/shikhanair/TeachersPetBot/actions) |
+| Do you use continuous integration, automatically running tests whenever changes are made to your source code? | 3 | [Github Actions](https://github.com/shikhanair/TeachersPetBot/actions) |
+| Are your test results publicly visible? | 3 | [Github Actions](https://github.com/shikhanair/TeachersPetBot/actions) |
 | Are all manually-run tests documented? * |  |  |
 | Does your project have resources (e.g. blog, Twitter, RSS feed, Facebook page, wiki, mailing list) that are regularly updated with information about your software? * |  |  |
 | Does your website state how many projects and users are associated with your project? * |  |  |
