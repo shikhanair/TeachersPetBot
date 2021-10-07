@@ -63,40 +63,40 @@ Total Points from Self-Assessment: 135
 | Is your source code stored in a repository under revision control? | 3 |  |
 | Is each source code release a snapshot of the repository? * |  |  |
 | Are releases tagged in the repository? * |  |  |
-| Is there a branch of the repository that is always stable? (i.e. tests always pass, code always builds successfully) * |  |  |
-| Do you back-up your repository? * |  |  |
+| Is there a branch of the repository that is always stable? (i.e. tests always pass, code always builds successfully) | 2 | Main branch is now kept stable |
+| Do you back-up your repository? | 3 | Github and cloned repo's developers worked on |
 | Do you provide publicly-available instructions for building your software from the source code? | 3 | [Installation/Testing guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md) |
-| Can you build, or package, your software using an automated tool? * |  |  |
+| Can you build, or package, your software using an automated tool? | 0 |  |
 | Do you provide publicly-available instructions for deploying your software? | 3 | [Installation/Testing guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md) |
 | Does your documentation list all third-party dependencies? | 3 | [requirements.txt](https://github.com/shikhanair/TeachersPetBot/blob/main/requirements.txt) |
 | Does your documentation list the version number for all third-party dependencies? | 3 | [requirements.txt](https://github.com/shikhanair/TeachersPetBot/blob/main/requirements.txt) |
-| Does your software list the web address, and licences for all third-party dependencies and say whether the dependencies are mandatory or optional? * |  |  |
-| Can you download dependencies using a dependency management tool or package manager? * |  |  |
+| Does your software list the web address, and licences for all third-party dependencies and say whether the dependencies are mandatory or optional? | 0 |  |
+| Can you download dependencies using a dependency management tool or package manager? | 3 | [requirements.txt](https://github.com/shikhanair/TeachersPetBot/blob/main/requirements.txt) listed, evidenced in use of [Github Actions](https://github.com/shikhanair/TeachersPetBot/actions) |
 | Do you have tests that can be run after your software has been built or deployed to show whether the build or deployment has been successful? | 3 | [Installation/Testing guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md) |
 | Do you have an automated test suite for your software? | 3 | [Installation/Testing guide](https://github.com/shikhanair/TeachersPetBot/blob/main/Installation.md) |
 | Do you have a framework to periodically (e.g. nightly) run your tests on the latest version of the source code? | 3 | [Github Actions](https://github.com/shikhanair/TeachersPetBot/actions) |
 | Do you use continuous integration, automatically running tests whenever changes are made to your source code? | 3 | [Github Actions](https://github.com/shikhanair/TeachersPetBot/actions) |
 | Are your test results publicly visible? | 3 | [Github Actions](https://github.com/shikhanair/TeachersPetBot/actions) |
-| Are all manually-run tests documented? * |  |  |
-| Does your project have resources (e.g. blog, Twitter, RSS feed, Facebook page, wiki, mailing list) that are regularly updated with information about your software? * |  |  |
-| Does your website state how many projects and users are associated with your project? * |  |  |
-| Do you provide success stories on your website? * |  |  |
-| Do you list your important partners and collaborators on your website? * |  |  |
-| Do you list your project's publications on your website or link to a resource where these are available? * |  |  |
-| Do you list third-party publications that refer to your software on your website or link to a resource where these are available? * |  |  |
-| Can users subscribe to notifications to changes to your source code repository? * |  |  |
-| If your software is developed as an open source project (and, not just a project developing open source software), do you have a governance model? * |  |  |
-| Do you accept contributions (e.g. bug fixes, enhancements, documentation updates, tutorials) from people who are not part of your project? * |  |  |
+| Are all manually-run tests documented? | 0 |  |
+| Does your project have resources (e.g. blog, Twitter, RSS feed, Facebook page, wiki, mailing list) that are regularly updated with information about your software? | 0 |  |
+| Does your website state how many projects and users are associated with your project? | 0 |  |
+| Do you provide success stories on your website? | 0 |  |
+| Do you list your important partners and collaborators on your website? | 2 | [Insights](https://github.com/shikhanair/TeachersPetBot/pulse) |
+| Do you list your project's publications on your website or link to a resource where these are available? | 0 |  |
+| Do you list third-party publications that refer to your software on your website or link to a resource where these are available? | 0 |  |
+| Can users subscribe to notifications to changes to your source code repository? | 3 |  |
+| If your software is developed as an open source project (and, not just a project developing open source software), do you have a governance model? | 3 |  |
+| Do you accept contributions (e.g. bug fixes, enhancements, documentation updates, tutorials) from people who are not part of your project? | 3 |  |
 | Do you have a contributions policy? | 3 | [CONTRIBUTING.md](https://github.com/shikhanair/TeachersPetBot/blob/main/CONTRIBUTING.md) |
 | Is your contributions' policy publicly available? | 3 | [CONTRIBUTING.md](https://github.com/shikhanair/TeachersPetBot/blob/main/CONTRIBUTING.md) |
-| Do contributors keep the copyright/IP of their contributions? * |  |  |
+| Do contributors keep the copyright/IP of their contributions? | 0 |  |
 | Does your website and documentation clearly state the copyright owners of your software and documentation? | 3 | [LICENSE](https://github.com/shikhanair/TeachersPetBot/blob/main/LICENSE) |
-| Does each of your source code files include a copyright statement? |  |  |
+| Does each of your source code files include a copyright statement? | 0 |  |
 | Does your website and documentation clearly state the licence of your software? | 3 | [README.md](https://github.com/shikhanair/TeachersPetBot/blob/main/README.md) |
 | Is your software released under an open source licence? | 3 | [LICENSE](https://github.com/shikhanair/TeachersPetBot/blob/main/LICENSE) |
 | Is your software released under an OSI-approved open-source licence? | 3 | [LICENSE](https://github.com/shikhanair/TeachersPetBot/blob/main/LICENSE) |
-| Does each of your source code files include a licence header? * |  |  |
-| Do you have a recommended citation for your software? * |  |  |
-| Does your website or documentation include a project roadmap (a list of project and development milestones for the next 3, 6 and 12 months)? | 1 |  |
-| Does your website or documentation describe how your project is funded, and the period over which funding is guaranteed? | 0 | N/A |
-| Do you make timely announcements of the deprecation of components, APIs, etc.? | 0 | N/A |
+| Does each of your source code files include a licence header?  | 0 |  |
+| Do you have a recommended citation for your software? | 0 |  |
+| Does your website or documentation include a project roadmap (a list of project and development milestones for the next 3, 6 and 12 months)? | 1 | [Project Items](https://github.com/shikhanair/TeachersPetBot/projects/1) |
+| Does your website or documentation describe how your project is funded, and the period over which funding is guaranteed? | 0 ||
+| Do you make timely announcements of the deprecation of components, APIs, etc.? | 0 ||
