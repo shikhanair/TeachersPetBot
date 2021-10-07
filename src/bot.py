@@ -184,7 +184,7 @@ async def test(ctx):
 # Outputs:
 #      - Sends confirmation back to channel
 ###########################
-@bot.command()
+@bot.command(name='setInstructor', help='Set member to Instructor.')
 @commands.has_role('Instructor')
 async def set_instructor(ctx, member:discord.Member):
     ''' set instructor role command '''
