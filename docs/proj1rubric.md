@@ -1,4 +1,4 @@
-Total Points from Self-Assessment: 135
+Total Points from Self-Assessment: 229
 
 | Grading Points|Self-Assessment|Links|
 |-----|---------|-----|
