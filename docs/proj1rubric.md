@@ -53,11 +53,11 @@ Total Points from Self-Assessment: 135
 | Are e-mails to your support e-mail address received by more than one person? | 0|
 | Does your project have a ticketing system to manage bug reports and feature requests? | 3 |
 | Is your project's ticketing system publicly visible to your users, so they can view bug reports and feature requests? | 3|
-| Is your software’s architecture and design modular? * |  |  |
+| Is your software’s architecture and design modular? | 3 | Commands and features are separate from each other in general. |
 | Does your software use an accepted coding standard or convention? | 3 | [Pylint](https://github.com/shikhanair/TeachersPetBot/blob/main/.pylintrc) |
 | Does your software allow data to be imported and exported using open data formats? * |  |  |
 | Does your software allow communications using open communications protocols? * |  |  |
-| Is your software cross-platform compatible? * |  |  |
+| Is your software cross-platform compatible? | 3 | Just as discord is cross-platform. |
 | Does your software adhere to appropriate accessibility conventions or standards? * |  |  |
 | Does your documentation adhere to appropriate accessibility conventions or standards? * |  |  |
 | Is your source code stored in a repository under revision control? | 3 |  |
