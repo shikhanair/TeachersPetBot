@@ -7,12 +7,12 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5542626.svg)](https://doi.org/10.5281/zenodo.5542626)
 ![Python](https://img.shields.io/badge/python-v3.7+-brightgreen.svg)
-![GitHub](https://img.shields.io/github/license/shikhanair/TeachersPetBot)
-![GitHub issues](https://img.shields.io/github/issues/shikhanair/TeachersPetBot)
-![GitHub closed issues](https://img.shields.io/github/issues-closed/shikhanair/TeachersPetBot)
-![Lines of code](https://img.shields.io/tokei/lines/github/shikhanair/TeachersPetBot)
-[![codecov](https://codecov.io/gh/shikhanair/TeachersPetBot/branch/main/graph/badge.svg?token=ZQUQ8UC2Y6)](https://codecov.io/gh/shikhanair/TeachersPetBot)
+![GitHub](https://img.shields.io/github/license/Ashwinshankar98/TeachersPetBot)
 
+![GitHub issues](https://img.shields.io/bitbucket/issues/Ashwinshankar98/TeachersPetBot)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/Ashwinshankar98/TeachersPetBot)
+![Lines of code](https://img.shields.io/tokei/lines/github/Ashwinshankar98/TeachersPetBot)
+[![codecov](https://codecov.io/gh/Ashwinshankar98/TeachersPetBot/branch/main/graph/badge.svg?token=SK9PBZX2NM)](https://codecov.io/gh/Ashwinshankar98/TeachersPetBot)
   Click Below to Watch Our Video!
 [![Watch the video](https://github.com/shikhanair/TeachersPetBot/blob/main/images/teacherspetbot.png)](https://youtu.be/tExF88LHqgE)
   
