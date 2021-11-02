@@ -1,11 +1,17 @@
 import platform
 import asyncio
 import os
+from time import time
+
+
 import discord
 from discord.ext import commands
 from discord.utils import get
-from dotenv import load_dotenv
+from discord import __version__ as discord_version
 from discord_components import DiscordComponents
+
+from dotenv import load_dotenv
+
 
 
 import db
@@ -22,6 +28,9 @@ if platform.system() == 'Windows':
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+print(TOKEN)
+BOT_VERSION=os.getenv('VERSION')
+print(BOT_VERSION)
 Test_bot_application_ID = int(os.getenv('TEST_BOT_APP_ID'))
 
 TESTING_MODE = None
@@ -352,7 +361,19 @@ async def answer_question(ctx, q_num, answer):
     else:
         await ctx.author.send('Please send answers to the #q-and-a channel.')
         await ctx.message.delete()
+###########################
+# Function: ping
+# Description: Shows latency for debugging
+###########################
 
+@bot.command(name='ping', help='Returns Latency')
+
+async def ping(ctx):
+    start=time()
+    message=await ctx.send(f"Pong! : {bot.latency*1000:,.0f} ms")
+    end=time()
+    await message.edit(content="Pong! : "+bot.latency*1000+" ms."+
+    " Response time : "+(end-start)*1000+" ms.")
 ###########################
 # Function: begin_tests
 # Description: Start the automated testing
@@ -393,7 +414,8 @@ async def end_tests(ctx):
     # TODO maybe use ctx.bot.logout()
     await ctx.bot.close()
     # quit(0)
-
+if __name__ == '__main__':
+    bot.run(TOKEN)
 ###########################
 # Function: test_dummy
 # Description: Run the bot
