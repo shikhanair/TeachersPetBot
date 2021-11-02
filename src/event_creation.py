@@ -4,52 +4,14 @@
 import datetime
 from discord_components import Button, ButtonStyle, Select, SelectOption
 import validators
+from discord.utils import get
 from utils import wait_for_msg
+
 import office_hours
 import cal
-
 import db
 
 BOT = None
-
-###########################
-# Function: get_times
-# Description: helper function for acquiring the times an instructor wants event to be held during
-# Inputs:
-#      - ctx: context of this discord message
-#      - event_type: type of event which times are being asked for
-#      - command_invoker: discord user who is creating event
-# Outputs: the begin and end times for the event
-###########################
-async def get_times(ctx, event_type):
-    ''' get times input flow '''
-    await ctx.send(
-        f'Which times would you like the {event_type} to be on?\n'
-        'Enter in format `<begin_time>-<end_time>`, and times should be in 24-hour format.\n'
-        f'For example, setting {event_type} from 9:30am to 1pm can be done as 9:30-13'
-    )
-
-    msg = await wait_for_msg(BOT, ctx.channel)
-
-    times = msg.content.strip().split('-')
-    if len(times) != 2:
-        await ctx.send('Incorrect input. Aborting')
-        return
-
-    new_times = []
-    for t in times:
-        parts = t.split(':')
-        if len(parts) == 1:
-            new_time = (int(parts[0]), 0)
-        elif len(parts) == 2:
-            new_time = (int(parts[0]), int(parts[1]))
-        new_times.append(new_time)
-
-    if len(new_times) != 2:
-        await ctx.send('Incorrect input. Aborting')
-        return
-
-    return new_times
 
 ###########################
 # Function: create_event
@@ -71,97 +33,117 @@ async def create_event(ctx, testing_mode):
                 Button(style=ButtonStyle.red, label='Office Hour', custom_id='office-hour')
             ],
         )
+        def check(m):
+            return m.author == ctx.author and m.channel == ctx.channel
 
-        button_clicked = ((await wait_for_msg(BOT, ctx.channel)).content
-            if testing_mode else (await BOT.wait_for('button_click')).custom_id)
+        if testing_mode:
+            button_clicked = await BOT.wait_for('message', timeout = 5, check = check)
+            button_clicked = button_clicked.content
+        else:
+            button_clicked = (await BOT.wait_for('button_click')).custom_id
+
         if button_clicked == 'assignment':
             await ctx.send('What would you like the assignment to be called')
-            msg = await wait_for_msg(BOT, ctx.channel)
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
             title = msg.content.strip()
 
-            await ctx.send('Link associated with submission? Type N/A if none')
-            msg = await wait_for_msg(BOT, ctx.channel)
-            link = msg.content.strip() if msg.content.strip() != 'N/A' else None
+            await ctx.send('What is the due date of this assignment?\nEnter in format `MM-DD-YYYY`')
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
+            date = msg.content.strip()
+            try:
+                datetime.datetime.strptime(date, '%m-%d-%Y')
+            except ValueError:
+                await ctx.send('Invalid date foamt. Aborting.')
+                return
 
+            await ctx.send('What time is this assignment due?\nEnter in 24-hour format' +
+                ' e.g. an assignment due at 11:59pm can be inputted as 23:59')
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
+            t = msg.content.strip()
+            try:
+                datetime.datetime.strptime(t, '%H:%M')
+            except ValueError:
+                await ctx.send('Invalid Time format. Aborting.')
+                return
+            deadline = datetime.datetime.strptime(date+' '+t, '%m-%d-%Y %H:%M')
+
+            await ctx.send('Link associated with submission? Type N/A if none')
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
+            link = msg.content.strip() if msg.content.strip() != 'N/A' else None
             if link and not validators.url(link):
                 await ctx.send('Invalid URL. Aborting.')
                 return
 
             await ctx.send('Extra description for assignment? Type N/A if none')
-            msg = await wait_for_msg(BOT, ctx.channel)
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
             description = msg.content.strip() if msg.content.strip() != 'N/A' else None
 
-            await ctx.send('What is the due date of this assignment?\n' +
-                'Enter in format `MM-DD-YYYY`')
-            msg = await wait_for_msg(BOT, ctx.channel)
-            date = msg.content.strip()
-
-            is_valid = len(date) == 10
-            try:
-                datetime.datetime.strptime(date, '%m-%d-%Y')
-            except ValueError:
-                is_valid = False
-
-            if not is_valid:
-                await ctx.send('Invalid date. Aborting.')
-                return
-
-            await ctx.send('What time is this assignment due?\nEnter in 24-hour format' +
-                ' e.g. an assignment due at 11:59pm can be inputted as 23:59')
-            msg = await wait_for_msg(BOT, ctx.channel)
-            t = msg.content.strip()
-
-            try:
-                t = datetime.datetime.strptime(t, '%H:%M')
-            except ValueError:
-                try:
-                    t = datetime.datetime.strptime(t, '%H')
-                except ValueError:
-                    await ctx.send('Incorrect input. Aborting.')
-                    return
-
             db.mutation_query(
-                'INSERT INTO assignments VALUES (?, ?, ?, ?, ?, ?, ?)',
-                [ctx.guild.id, title, link, description, date, t.hour, t.minute]
+                'INSERT INTO assignments VALUES (?, ?, ?, ?, ?)',
+                [ctx.guild.id, title, link, description, deadline]
             )
 
             # TODO add assignment to events list
-
             await ctx.send('Assignment successfully created!')
             await cal.display_events(None)
         elif button_clicked == 'exam':
             await ctx.send('What is the title of this exam?')
-            msg = await wait_for_msg(BOT, ctx.channel)
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
             title = msg.content.strip()
 
-            await ctx.send('What content is this exam covering?')
-            msg = await wait_for_msg(BOT, ctx.channel)
-            description = msg.content.strip()
-
-            await ctx.send('What is the date of this exam?\nEnter in format `MM-DD-YYYY`')
-            msg = await wait_for_msg(BOT, ctx.channel)
-            date = msg.content.strip()
-
-            is_valid = len(date) == 10
+            await ctx.send('What is the start date of this exam?\nEnter in format `MM-DD-YYYY`')
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
+            date_start = msg.content.strip()
             try:
-                datetime.datetime.strptime(date, '%m-%d-%Y')
+                datetime.datetime.strptime(date_start, '%m-%d-%Y')
             except ValueError:
-                is_valid = False
-
-            if not is_valid:
                 await ctx.send('Invalid date. Aborting.')
                 return
 
-            times = await get_times(ctx, 'exam')
-            if not times:
+            await ctx.send('What is the start time for the exam?\nEnter in 24-hour format' +
+                ' e.g. an exam starting at 1:59pm can be inputted as 13:59')
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
+            t_start = msg.content.strip()
+            try:
+                datetime.datetime.strptime(t_start, '%H:%M')
+            except ValueError:
+                await ctx.send('Invalid Time format. Aborting.')
                 return
 
-            ((begin_hour, begin_minute), (end_hour, end_minute)) = times
+            start = datetime.datetime.strptime(date_start+' '+t_start, '%m-%d-%Y %H:%M')
+
+            await ctx.send('What is the end date of this exam?\nEnter in format `MM-DD-YYYY`')
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
+            date_end = msg.content.strip()
+            try:
+                datetime.datetime.strptime(date_end, '%m-%d-%Y')
+            except ValueError:
+                await ctx.send('Invalid date. Aborting.')
+                return
+
+            await ctx.send('What is the end time for the exam?\nEnter in 24-hour format' +
+                ' e.g. an exam ending at 1:59pm can be inputted as 13:59')
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
+            t_end= msg.content.strip()
+            try:
+                datetime.datetime.strptime(t_end, '%H:%M')
+            except ValueError:
+                await ctx.send('Invalid Time format. Aborting.')
+                return
+            end = datetime.datetime.strptime(date_end+' '+t_end, '%m-%d-%Y %H:%M')
+
+            await ctx.send('What is the duration of the exam?\nEnter in minutes' +
+                ' e.g. for 1hr 25 mins input as 85 minutes')
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
+            duration = msg.content.strip()
+
+            await ctx.send('description of the exam(like syllabus, online/inperson)? Type N/A if none')
+            msg = await BOT.wait_for('message', timeout = 300.0, check = check)
+            description = msg.content.strip() if msg.content.strip() != 'N/A' else None
 
             db.mutation_query(
-                'INSERT INTO exams VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                [ctx.guild.id, title, description, date,
-                 begin_hour, begin_minute, end_hour, end_minute]
+                'INSERT INTO exams VALUES (?, ?, ?, ?, ?, ?)',
+                [ctx.guild.id, title, description, duration, start, end]
             )
 
             # TODO add exam to events list
@@ -169,12 +151,8 @@ async def create_event(ctx, testing_mode):
             await ctx.send('Exam successfully created!')
             await cal.display_events(None)
         elif button_clicked == 'office-hour':
-            all_instructors = []
-            for mem in ctx.guild.members:
-                is_instructor = next((role.name == 'Instructor'
-                    for role in mem.roles), None) is not None
-                if is_instructor:
-                    all_instructors.append(mem)
+            leadrole = get(ctx.guild.roles, name='Instructor')
+            all_instructors = leadrole.members
 
             if len(all_instructors) < 1:
                 await ctx.send('There are no instructors in the guild. Aborting')
@@ -192,11 +170,12 @@ async def create_event(ctx, testing_mode):
                     )
                 ]
             )
-
-            # instr_select_interaction = await BOT.wait_for('select_option')
-            # instructor = instr_select_interaction.values[0]
-            instructor = ((await wait_for_msg(BOT, ctx.channel)).content
-                if testing_mode else (await BOT.wait_for('select_option')).values[0])
+            if testing_mode:
+                instructor = await BOT.wait_for('message', timeout = 5, check = check)
+                instructor = instructor.content
+            else:
+                instructor = (await BOT.wait_for('select_option')).values[0]
+            #instructor = ((await BOT.wait_for(ctx.channel)).content if testing_mode else (await BOT.wait_for('select_option')).values[0])
 
             await ctx.send(
                 'Which day would you like the office hour to be on?',
@@ -216,36 +195,44 @@ async def create_event(ctx, testing_mode):
                 ]
             )
 
-            # day_interaction = await BOT.wait_for('select_option', check=lambda x: x.values[0] in
-            # ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))
-            day = (
-                (await wait_for_msg(BOT, ctx.channel)).content
-                if testing_mode else
-                (await BOT.wait_for('select_option', check=lambda x: x.values[0] in
-                    ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'))).values[0]
-            )
-            # day = day_interaction.values[0]
-            day_num = ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun').index(day)
-
-            times = await get_times(ctx, 'office hour')
-            if not times:
+            if testing_mode:
+                day = await BOT.wait_for('message', timeout = 5, check = check)
+                day = day.content
+            else:
+                day = (await BOT.wait_for('select_option')).values[0]
+           
+            await ctx.send('What is the start time of the office hour?\nEnter in 24-hour format' +
+                ' e.g. an starting at 1:59pm can be inputted as 13:59')
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
+            t_start = msg.content.strip()
+            try:
+                t_start = datetime.datetime.strptime(t_start, '%H:%M')
+            except ValueError:
+                await ctx.send('Invalid Time format. Aborting.')
                 return
 
-            ((begin_hour, begin_minute), (end_hour, end_minute)) = times
+            await ctx.send('What is the end time of the office hour?\nEnter in 24-hour format' +
+                ' e.g. an exam ending at 1:59pm can be inputted as 13:59')
+            msg = await BOT.wait_for('message', timeout = 60.0, check = check)
+            t_end= msg.content.strip()
+            try:
+                t_end = datetime.datetime.strptime(t_end, '%H:%M')
+            except ValueError:
+                await ctx.send('Invalid Time format. Aborting.')
+                return
 
             office_hours.add_office_hour(
                 ctx.guild,
                 office_hours.TaOfficeHour(
                     instructor,
-                    day_num,
-                    (datetime.time(hour=begin_hour, minute=begin_minute),
-                     datetime.time(hour=end_hour, minute=end_minute))
+                    day,
+                    (t_start, t_end)
                 )
             )
 
             db.mutation_query(
-                'INSERT INTO ta_office_hours VALUES (?, ?, ?, ?, ?, ?, ?)',
-                [ctx.guild.id, instructor, day_num, begin_hour, begin_minute, end_hour, end_minute]
+                'INSERT INTO ta_office_hours VALUES (?, ?, ?, ?, ?)',
+                [ctx.guild.id, instructor, day, t_start, t_end]
             )
 
             await ctx.send('Office hour successfully created!')

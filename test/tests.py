@@ -1,18 +1,22 @@
 import os
 import discord
 from dotenv import load_dotenv
+import platform
+import asyncio
 
 import test_office_hours
 import test_event_creation
 import test_qna
 import test_calendar
 
+if platform.system() == 'Windows':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 load_dotenv()
 TOKEN = os.getenv('TESTING_BOT_TOKEN')
+TEST_GUILD_ID = int(os.getenv('TEST_GUILD_ID'))
 
 testing_bot = discord.Client()
-
-TEST_GUILD_ID = 900108417404923924
 
 async def run_tests():
     exit_status = 0
@@ -33,9 +37,9 @@ async def run_tests():
     finally:
         await end_tests()
 
-    await testing_bot.close()
     print('exit_status: ', exit_status)
     assert exit_status == 0
+    await testing_bot.close()
 
 
 @testing_bot.event
@@ -53,5 +57,9 @@ async def end_tests():
 if __name__ == '__main__':
     testing_bot.run(TOKEN)
 
+###########################
+# Function: test_dummy
+# Description: Run the bot
+###########################
 def test_bot():
     testing_bot.run(TOKEN)

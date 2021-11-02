@@ -4,6 +4,7 @@
 from datetime import datetime, time
 import discord
 from discord.ext import tasks
+from discord.utils import get
 
 import db
 
@@ -160,7 +161,7 @@ async def office_hour_command(ctx, command, *args):
 async def open_oh(guild, ta):
     category = await guild.create_category_channel(f'Office Hour {ta}')
 
-    instructor_role = next((role for role in guild.roles if role.name == 'Instructor'), None)
+    instructor_role = get(guild.roles, name='Instructor')
     overwrites = {
         guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False),
         instructor_role: discord.PermissionOverwrite(read_messages=True, send_messages=True)
@@ -227,21 +228,26 @@ class TaOfficeHour:
 ###########################
 @tasks.loop(seconds=5)
 async def check_office_hour_loop():
+    days = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
     curr_datetime = datetime.now()
-    curr_day = curr_datetime.weekday()
+    curr_day = days[curr_datetime.weekday()]
     curr_time = curr_datetime.time()
     for guild in bot.guilds:
-        ta_office_hours = all_guilds_ta_office_hours[guild.id]
-        for office_hour in ta_office_hours:
-            day = office_hour.day
-            if curr_day == day:
-                begin_time, end_time = office_hour.times
-                ta_name_channelified = office_hour.ta.lower().replace(" ", "-")
-                if begin_time <= curr_time <= end_time and \
-                    ta_name_channelified not in office_hour_queues:
-                    await open_oh(guild, office_hour.ta)
-                elif curr_time > end_time and ta_name_channelified in office_hour_queues:
-                    await close_oh(guild, office_hour.ta)
+        if guild.id in all_guilds_ta_office_hours:
+            ta_office_hours = all_guilds_ta_office_hours[guild.id]
+            for office_hour in ta_office_hours:
+                day = office_hour.day
+                if curr_day == day:
+                    begin_time, end_time = office_hour.times
+                    begin_time = datetime.strptime(str(begin_time).rsplit(' ', 1)[1], '%H:%M:%S').time()
+                    end_time = datetime.strptime(str(end_time).rsplit(' ', 1)[1], '%H:%M:%S').time()
+                    ta_name_channelified = office_hour.ta.lower().replace(" ", "-")
+                    if begin_time <= curr_time <= end_time and ta_name_channelified not in office_hour_queues:
+                        print('channel created')
+                        await open_oh(guild, office_hour.ta)
+                    elif curr_time > end_time and ta_name_channelified in office_hour_queues:
+                        print('channel closed')
+                        await close_oh(guild, office_hour.ta)
 
 ###########################
 # Function: add_office_hour
@@ -273,10 +279,9 @@ def init(b):
     bot = b
     for guild in bot.guilds:
         ta_office_hours = [
-            TaOfficeHour(ta, day, (time(hour=begin_hr, minute=begin_min),
-                time(hour=end_hr, minute=end_min)))
-            for ta, day, begin_hr, begin_min, end_hr, end_min in db.select_query(
-                'SELECT ta, day, begin_hr, begin_min, end_hr, end_min '
+            TaOfficeHour(ta, day, (begin_time, end_time))
+            for ta, day, begin_time, end_time in db.select_query(
+                'SELECT ta, day, begin_time, end_time '
                 'FROM ta_office_hours WHERE guild_id = ?', [guild.id])
         ]
 

@@ -7,6 +7,7 @@ def connect():
     ''' connect program to database file db.sqlite '''
     global CON
     db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'db.sqlite')
+    print(db_path)
     try:
         CON = sqlite3.connect(db_path)
         print("Connection to SQLite DB successful")
