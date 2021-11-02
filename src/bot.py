@@ -393,7 +393,8 @@ async def end_tests(ctx):
     # TODO maybe use ctx.bot.logout()
     await ctx.bot.close()
     # quit(0)
-
+if __name__ == '__main__':
+    bot.run(TOKEN)
 ###########################
 # Function: test_dummy
 # Description: Run the bot
