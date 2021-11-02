@@ -1,16 +1,12 @@
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
-import discord
-from dotenv import load_dotenv
-from discord.ext import commands
-from discord_components import DiscordComponents
-from discord.utils import get
-from time import time
 import platform
 import asyncio
+import os
+import discord
+from discord.ext import commands
+from discord.utils import get
+from dotenv import load_dotenv
+from discord_components import DiscordComponents
 
-#from discord.ext import tasks not used
-#from apscheduler.triggers.cron import CronTrigger not used
 
 import db
 import profanity
@@ -18,6 +14,8 @@ import event_creation
 import office_hours
 import cal
 import qna
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 if platform.system() == 'Windows':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
@@ -118,19 +116,20 @@ async def on_guild_join(guild):
         await channel.send("To add Instructors, type \"!setInstructor @<member>\"")
         #await channel.send("To remove instructors, type \"!removeInstructor @<member>\"")
         #Create Text channels if they don't exist
-        overwrites = {guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False),
-                        leadrole: discord.PermissionOverwrite(read_messages=True, send_messages=True)}
-        if get(guild.text_channels, name='instructor-commands') == None:
+        overwrites = {guild.default_role: discord.PermissionOverwrite(read_messages=False,
+            send_messages=False), leadrole: discord.PermissionOverwrite(read_messages=True,
+            send_messages=True)}
+        if get(guild.text_channels, name='instructor-commands') is None:
             await guild.create_text_channel('instructor-commands', overwrites=overwrites)
             await channel.send("instructor-commands channel has been added!")
         else:
             await channel.send("instructor-commands channel is already present!")
-        if get(guild.text_channels, name='q-and-a') == None:
+        if get(guild.text_channels, name='q-and-a') is None:
             await guild.create_text_channel('q-and-a')
             await channel.send("q-and-a channel has been added!")
         else:
             await channel.send("q-and-a channel is already present!")
-        if get(guild.text_channels, name='course-calendar') == None:
+        if get(guild.text_channels, name='course-calendar') is None:
             await guild.create_text_channel('course-calendar')
             await channel.send("course-calendar channel has been added!")
         else:
@@ -233,7 +232,7 @@ async def get_instructor(ctx):
         await ctx.send(instructors + " is the Instructor!")
     else:
         await ctx.send(instructors + " are the Instructors!")
-    
+
 ###########################
 # Function: set_instructor
 # Description: Command used to give Instructor role out by instructors
@@ -394,22 +393,6 @@ async def end_tests(ctx):
     # TODO maybe use ctx.bot.logout()
     await ctx.bot.close()
     # quit(0)
-
-###########################
-# Function: ping
-# Description: Shows latency for debugging 
-###########################
-
-@bot.command(name='ping', help='Returns Latency')
-async def ping(ctx):
-    start=time()
-    message=await ctx.send(f"Pong! : {bot.latency*1000:,.0f} ms")
-    end=time()
-
-    await message.edit(content=f"Pong! : {bot.latency*1000:,.0f} ms. Response time : {(end-start)*1000:,.0f} ms")
-
-if __name__ == '__main__':
-    bot.run(TOKEN)
 
 ###########################
 # Function: test_dummy

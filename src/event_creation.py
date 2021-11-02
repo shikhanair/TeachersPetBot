@@ -5,7 +5,6 @@ import datetime
 from discord_components import Button, ButtonStyle, Select, SelectOption
 import validators
 from discord.utils import get
-from utils import wait_for_msg
 
 import office_hours
 import cal
@@ -137,7 +136,8 @@ async def create_event(ctx, testing_mode):
             msg = await BOT.wait_for('message', timeout = 60.0, check = check)
             duration = msg.content.strip()
 
-            await ctx.send('description of the exam(like syllabus, online/inperson)? Type N/A if none')
+            await ctx.send('description of the exam(like syllabus, online/inperson)?' +
+             'Type N/A if none')
             msg = await BOT.wait_for('message', timeout = 300.0, check = check)
             description = msg.content.strip() if msg.content.strip() != 'N/A' else None
 
@@ -175,8 +175,6 @@ async def create_event(ctx, testing_mode):
                 instructor = instructor.content
             else:
                 instructor = (await BOT.wait_for('select_option')).values[0]
-            #instructor = ((await BOT.wait_for(ctx.channel)).content if testing_mode else (await BOT.wait_for('select_option')).values[0])
-
             await ctx.send(
                 'Which day would you like the office hour to be on?',
                 components=[
@@ -200,7 +198,6 @@ async def create_event(ctx, testing_mode):
                 day = day.content
             else:
                 day = (await BOT.wait_for('select_option')).values[0]
-           
             await ctx.send('What is the start time of the office hour?\nEnter in 24-hour format' +
                 ' e.g. an starting at 1:59pm can be inputted as 13:59')
             msg = await BOT.wait_for('message', timeout = 60.0, check = check)

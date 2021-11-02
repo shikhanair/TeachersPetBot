@@ -1,7 +1,7 @@
 ###########################
 # Functionality related to administering office hours
 ###########################
-from datetime import datetime, time
+from datetime import datetime
 import discord
 from discord.ext import tasks
 from discord.utils import get
@@ -239,10 +239,12 @@ async def check_office_hour_loop():
                 day = office_hour.day
                 if curr_day == day:
                     begin_time, end_time = office_hour.times
-                    begin_time = datetime.strptime(str(begin_time).rsplit(' ', 1)[1], '%H:%M:%S').time()
+                    begin_time = datetime.strptime(str(begin_time).rsplit(' ', 1)[1],
+                     '%H:%M:%S').time()
                     end_time = datetime.strptime(str(end_time).rsplit(' ', 1)[1], '%H:%M:%S').time()
                     ta_name_channelified = office_hour.ta.lower().replace(" ", "-")
-                    if begin_time <= curr_time <= end_time and ta_name_channelified not in office_hour_queues:
+                    if (begin_time <= curr_time <= end_time and ta_name_channelified
+                     not in office_hour_queues):
                         print('channel created')
                         await open_oh(guild, office_hour.ta)
                     elif curr_time > end_time and ta_name_channelified in office_hour_queues:
