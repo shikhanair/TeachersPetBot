@@ -33,6 +33,9 @@ jobs:
         cat << EOF > .env
         DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
         TESTING_BOT_TOKEN=${{ secrets.TESTING_BOT_TOKEN }}
+        TEST_GUILD_ID=${{ secrets.TEST_GUILD_ID }}
+        DICORD_BOT_NAME=${{ secrets.DICORD_BOT_NAME }}
+        TEST_BOT_APP_ID=${{ secrets.TEST_BOT_APP_ID }}
         EOF
 #     - name: Test with pytest
 #       run: |
