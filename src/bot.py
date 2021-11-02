@@ -5,6 +5,7 @@ from time import time
 from platform import python_version
 from datetime import datetime, timedelta
 from psutil import Process, virtual_memory
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 
 import discord
@@ -26,6 +27,9 @@ import cal
 import qna
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+
+numbers = ("1️⃣", "2⃣", "3⃣", "4⃣", "5⃣",
+		   "6⃣", "7⃣", "8⃣", "9⃣", "🔟")
 
 if platform.system() == 'Windows':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
@@ -267,7 +271,8 @@ async def set_instructor(ctx, member:discord.Member):
             await member.add_roles(irole, reason=None, atomic=True)
             await ctx.channel.send(member.name + " has been given Instructor role!")
             channel = get(ctx.guild.text_channels, name='instructor-commands')
-            await channel.set_permissions(member, read_messages=True, send_messages=True)
+            await channel.set_permissions(member, read_messages=True,
+            send_messages=True,read_message_history=False)
     else:
         await ctx.channel.send('Not a valid command for this channel')
 
@@ -413,6 +418,72 @@ async def show_stats(ctx):
         embed.add_field(name=name, value=value, inline=inline)
 
     await ctx.send(embed=embed)
+###########################
+# Function: poll
+# Description: Poll functionality for  administrators
+# Inputs:
+#      - ctx: context of the command
+#      - minutes: minutes in integer
+#      - question: Enter the topic on which the poll is created
+#      - options: options for poll
+# Outputs:
+#      - Poll in discord channel. results after the specified time.
+###########################
+polls=[]
+scheduler = AsyncIOScheduler()
+@bot.command(name='poll', help='Set Poll for a specified time and topic.')
+@commands.has_role('Instructor')
+
+async def create_poll(ctx, hours: int, question: str, *options):
+
+    if len(options) > 10:
+        await ctx.send("You can only supply a maximum of 10 options.")
+
+    else:
+        embed = Embed(title="Poll ‼",
+                        description=question,
+                        colour=ctx.author.colour,
+                        timestamp=datetime.utcnow())
+
+        fields = [("Options", "\n".join([f"{numbers[idx]} {option}" for idx,
+        option in enumerate(options)]), False),
+        ("Instructions", "React to cast a vote!", False),
+        ("Duration","The Voting will end in "+str(hours)+" Minutes",False)]
+
+        for name, value, inline in fields:
+            embed.add_field(name=name, value=value, inline=inline)
+
+        message = await ctx.send(embed=embed)
+
+        for emoji in numbers[:len(options)]:
+            await message.add_reaction(emoji)
+
+        polls.append((message.channel.id, message.id))
+        scheduler.add_job(complete_poll, "interval",
+        minutes=hours,args=(message.channel.id, message.id))
+        scheduler.start()
+
+async def complete_poll(channel_id, message_id):
+    message = await bot.get_channel(channel_id).fetch_message(message_id)
+
+    most_voted = max(message.reactions, key=lambda r: r.count)
+
+    await message.channel.send("The results are in and option "+most_voted.emoji+
+    " was the most popular with "+str(most_voted.count-1)+" votes!")
+    polls.remove((message.channel.id, message.id))
+    scheduler.shutdown()
+
+@bot.event
+async def on_raw_reaction_add(payload):
+    if payload.message_id in (poll[1] for poll in polls):
+        message = await bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
+
+        for reaction in message.reactions:
+            if (not payload.member.bot
+                and payload.member in await reaction.users().flatten()
+                and reaction.emoji != payload.emoji.name):
+                await message.remove_reaction(reaction.emoji, payload.member)
+
 ###########################
 # Function: begin_tests
 # Description: Start the automated testing
