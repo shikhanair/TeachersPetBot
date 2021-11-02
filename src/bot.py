@@ -2,9 +2,13 @@ import platform
 import asyncio
 import os
 from time import time
+from platform import python_version
+from datetime import datetime, timedelta
+from psutil import Process, virtual_memory
 
 
 import discord
+from discord import Embed
 from discord.ext import commands
 from discord.utils import get
 from discord import __version__ as discord_version
@@ -372,8 +376,43 @@ async def ping(ctx):
     start=time()
     message=await ctx.send(f"Pong! : {bot.latency*1000:,.0f} ms")
     end=time()
-    await message.edit(content="Pong! : "+bot.latency*1000+" ms."+
-    " Response time : "+(end-start)*1000+" ms.")
+    await message.edit(content="Pong! : "+str(int(bot.latency*1000))+" ms."+
+    " Response time : "+str(int((end-start)*1000))+" ms.")
+###########################
+# Function: stats
+# Description: Shows stats like
+###########################
+
+@bot.command(name='stats', help='shows bot stats')
+
+async def show_stats(ctx):
+    embed = Embed(title="Bot stats",
+                    colour=ctx.author.colour,
+                    thumbnail=bot.user.avatar_url,
+                    timestamp=datetime.utcnow())
+
+    proc = Process()
+    with proc.oneshot():
+        uptime = timedelta(seconds=time()-proc.create_time())
+        cpu_time = timedelta(seconds=(cpu := proc.cpu_times()).system + cpu.user)
+        mem_total = virtual_memory().total / (1024**2)
+        mem_of_total = proc.memory_percent()
+        mem_usage = mem_total * (mem_of_total / 100)
+
+    fields = [
+        ("Bot version", BOT_VERSION, True),
+        ("Python version", python_version(), True),
+        ("discord.py version", discord_version, True),
+        ("Uptime", uptime, True),
+        ("CPU time", cpu_time, True),
+        ("Memory usage", f"{mem_usage:,.3f} / {mem_total:,.0f} MiB ({mem_of_total:.0f}%)", True),
+        ("Users", f"{ctx.guild.member_count:,}", True)
+    ]
+
+    for name, value, inline in fields:
+        embed.add_field(name=name, value=value, inline=inline)
+
+    await ctx.send(embed=embed)
 ###########################
 # Function: begin_tests
 # Description: Start the automated testing
