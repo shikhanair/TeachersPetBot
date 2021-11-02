@@ -58,7 +58,7 @@ def update_calendar(ctx):
             'WHERE guild_id = ? ' +
             'ORDER BY begin_date ASC', [ctx.guild.id]):
         exams.append([ f'{begin_date}',
-            f'{begin_date} - {end_date}\n{title}\n{desc}\nduration\n\n'])
+            f'{begin_date} - {end_date}\n{title}\n{desc}\n{duration}\n\n'])
 
     # get current time for comparison and make sure it is of same string format
     current_time = datetime.now().strftime('%m-%d-%Y %H:%M')
