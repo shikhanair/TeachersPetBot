@@ -1,10 +1,16 @@
+import os
+from dotenv import load_dotenv
 import asyncio
 from time import sleep
+
+load_dotenv()
+DICORD_BOT_NAME = os.getenv('DICORD_BOT_NAME')
 
 async def wait_for_msg(testing_bot, channel, content):
     sleep(0.6)
     try:
-        return await testing_bot.wait_for('message', timeout=2, check=lambda x: x.guild.id == channel.guild.id and x.author.name == 'TeachersPetBot' and content in x.content)
+        return await testing_bot.wait_for('message', timeout=2, check=lambda x: x.guild.id == channel.guild.id and x.author.name == DICORD_BOT_NAME and content in x.content)
+
     except asyncio.TimeoutError:
         messages = await channel.history(limit=1).flatten()
         if not (len(messages) != 0 and content in messages[0].content):

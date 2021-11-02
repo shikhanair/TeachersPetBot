@@ -34,6 +34,7 @@ async def test_question(testing_bot):
     sleep(0.5)
 
     messages = await qna_channel.history(limit=1).flatten()
+
     for m in messages:
         assert 'Q1: Hello' in m.content
 
