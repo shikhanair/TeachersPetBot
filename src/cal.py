@@ -18,7 +18,7 @@ async def display_events(ctx):
     global MSG
 
     # recreate the embed from the database
-    update_calendar()
+    update_calendar(ctx)
 
     # if it was never created, send the first message
     if not MSG:
@@ -32,7 +32,7 @@ async def display_events(ctx):
 # Function: update_calendar
 # Description: Builds the calendar embed
 ###########################
-def update_calendar():
+def update_calendar(ctx):
     ''' create the calendar embed, it is a global so also updates it '''
     global CALENDAR_EMBED
 
@@ -45,30 +45,20 @@ def update_calendar():
     # which is the date, we are comparing as strings but still works for ordering events by date
     # do this for the events we care about in the calendar 'assignments and exams'
     assignments = []
-    for title, link, desc, date, due_hr, due_min in db.select_query(
-            'SELECT ' +
-                'title, link, desc, date, due_hr, due_min ' +
-            'FROM ' +
-                'assignments ' +
-            'ORDER BY ' +
-                'date ASC, ' +
-                'due_hr ASC, ' +
-                'due_min ASC'):
-        assignments.append([ f'{date} {due_hr}:{due_min}',
-            f'{date} {due_hr}:{due_min}\n{title}\n{desc}\n{link}\n\n'])
+    for title, link, desc, date in db.select_query(
+            'SELECT title, link, desc, date FROM assignments ' +
+            'WHERE guild_id = ? ' +
+            'ORDER BY date ASC', [ctx.guild.id]):
+        assignments.append([ f'{date}',
+            f'{date}\n{title}\n{desc}\n{link}\n\n'])
 
     exams = []
-    for title, desc, date, begin_hr, begin_min, end_hr, end_min in db.select_query(
-            'SELECT ' +
-                'title, desc, date, begin_hr, begin_min, end_hr, end_min ' +
-            'FROM ' +
-                'exams ' +
-            'ORDER BY ' +
-                'date ASC, ' +
-                'begin_hr ASC, '
-                'begin_min ASC'):
-        exams.append([ f'{date} {begin_hr}:{begin_min}',
-            f'{date} {begin_hr}:{begin_min} - {end_hr}:{end_min}\n{title}\n{desc}\n\n'])
+    for title, desc, duration, begin_date, end_date in db.select_query(
+            'SELECT title, desc, duration, begin_date, end_date FROM exams ' +
+            'WHERE guild_id = ? ' +
+            'ORDER BY begin_date ASC', [ctx.guild.id]):
+        exams.append([ f'{begin_date}',
+            f'{begin_date} - {end_date}\n{title}\n{desc}\nduration\n\n'])
 
     # get current time for comparison and make sure it is of same string format
     current_time = datetime.now().strftime('%m-%d-%Y %H:%M')
