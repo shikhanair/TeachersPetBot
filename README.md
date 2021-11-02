@@ -5,7 +5,7 @@
 <h2 align="center"> Streamline Your Class Discord</h1>
 
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5542626.svg)](https://doi.org/10.5281/zenodo.5542626)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5640178.svg)](https://doi.org/10.5281/zenodo.5640178)
 ![Python](https://img.shields.io/badge/python-v3.7+-brightgreen.svg)
 ![GitHub](https://img.shields.io/github/license/Ashwinshankar98/TeachersPetBot)
 ![GitHub issues](https://img.shields.io/github/issues/Ashwinshankar98/TeachersPetBot)
