@@ -89,6 +89,16 @@ async def on_ready():
         )
     ''')
 
+    db.mutation_query('''
+        CREATE TABLE IF NOT EXISTS qna (
+            guild_id    INT,
+            author       VARCHAR(50),
+            answer        VARCHAR(300),
+            qnumber      INT
+        )
+    ''')
+
+
     event_creation.init(bot)
     office_hours.init(bot)
     await cal.init(bot)
@@ -485,6 +495,19 @@ async def on_raw_reaction_add(payload):
                 await message.remove_reaction(reaction.emoji, payload.member)
 
 ###########################
+# Function: custom-profanity
+# Description: Define a word to be added to the profanity filter
+# Inputs:
+#      - ctx: context of the command
+###########################
+@bot.command(name = 'custom', help = 'Add word to profanity filter')
+async def custom_profanity(ctx, pword):
+    ''' adding custom word to profanity list '''
+    profanity.custom_words.append(pword)
+    await ctx.message.delete()
+
+
+###########################
 # Function: begin_tests
 # Description: Start the automated testing
 # Inputs:
@@ -516,6 +539,7 @@ async def begin_tests(ctx):
 @bot.command('end-tests')
 async def end_tests(ctx):
     ''' end tests command '''
+    print("enter")
     if ctx.author.id != Test_bot_application_ID:
         return
 
