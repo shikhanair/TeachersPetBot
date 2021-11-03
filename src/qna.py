@@ -118,4 +118,4 @@ async def answer(ctx, num, ans):
 
     # delete user msg
     await ctx.message.delete()
-
+    
