@@ -24,5 +24,5 @@ def check_profanity(msg):
 def censor_profanity(msg):
     ''' take action on the profanity by censoring it '''
     if msg in custom_words:
-        msg = '**'
+        msg = '****'
     return profanity.censor(msg)
