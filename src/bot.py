@@ -539,7 +539,6 @@ async def begin_tests(ctx):
 @bot.command('end-tests')
 async def end_tests(ctx):
     ''' end tests command '''
-    print("enter")
     if ctx.author.id != Test_bot_application_ID:
         return
 
