@@ -30,6 +30,8 @@ async def run_tests():
         await test_event_creation.test(testing_bot, TEST_GUILD_ID)
         print('testing calendar\n----------')
         await test_calendar.test(testing_bot, TEST_GUILD_ID)
+        print('testing profanity\n----------')
+        await test_profanity.test(testing_bot, TEST_GUILD_ID)
     except Exception as ex:
         print('exception: ', type(ex).__name__ + ':', ex)
         print('--')
