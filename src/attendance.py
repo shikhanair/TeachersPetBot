@@ -6,6 +6,8 @@ from discord import Embed
 from dotenv import load_dotenv
 
 load_dotenv()
+main_bot = os.getenv('DICORD_BOT_NAME')
+test_bot = os.getenv('TEST_BOT_NAME')
 
 ###########################
 # Function: compute
@@ -41,7 +43,9 @@ async def compute(bot, ctx):
             embed.add_field(name="Attendees: 0", value="None", inline=True)
 
         for student in text_channel.members:
-            if student.name not in attendees:
+            if student.name not in attendees and \
+                    student.name != main_bot and \
+                    student.name != test_bot:
                 absentees.append(student.name)
         if absentees:
             embed.add_field(name=f"Absentees: {len(absentees)}",
