@@ -25,6 +25,7 @@ import event_creation
 import office_hours
 import cal
 import qna
+import attendance
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
