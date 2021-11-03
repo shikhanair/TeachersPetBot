@@ -2,7 +2,7 @@
 # Implements Q and A functionality
 ###########################
 from discord import NotFound
-
+import db
 # keep track of next question number
 QUESTION_NUMBER = 1
 
@@ -51,7 +51,10 @@ async def question(ctx, qs):
     new_question = QuestionsAnswers(qs, QUESTION_NUMBER, message.id, '')
     # add question to list
     QNA[QUESTION_NUMBER] = new_question
-
+    db.mutation_query(
+                'INSERT INTO qna VALUES (?, ?, ?, ?)',
+                [ctx.guild.id, ctx.author.name, '', QUESTION_NUMBER]
+    )
     # increment question number for next question
     QUESTION_NUMBER += 1
 
@@ -72,7 +75,7 @@ async def question(ctx, qs):
 async def answer(ctx, num, ans):
     ''' answer the specific question '''
 
-    # check if question number exists
+    ''' check if question number exists '''
     if int(num) not in QNA.keys():
         await ctx.author.send('Invalid question number: ' + str(num))
         # delete user msg
@@ -96,12 +99,14 @@ async def answer(ctx, num, ans):
     else:
         role = 'Student'
     new_answer = role + ' Ans: ' + ans
+    db.mutation_query(
+                'UPDATE qna SET answer = ? WHERE qnumber = ?',(ans, int(num)),
+            )
 
-    # store new answer
+    # store new answer and uopdate the new answer to the database
     if not q_answered.answer == '':
         q_answered.answer += '\n'
     q_answered.answer += new_answer
-
     # check if message exists and edit
     q_str = 'Q' + str(q_answered.number) + ': ' + q_answered.question
     content = q_str + '\n' + q_answered.answer
@@ -113,3 +118,4 @@ async def answer(ctx, num, ans):
 
     # delete user msg
     await ctx.message.delete()
+
