@@ -1,8 +1,8 @@
 import os
-import discord
-from dotenv import load_dotenv
 import platform
 import asyncio
+import discord
+from dotenv import load_dotenv
 
 import test_office_hours
 import test_event_creation
@@ -36,7 +36,7 @@ async def run_tests():
         await test_profanity.test(testing_bot, TEST_GUILD_ID)
         print('testing attendance\n----------')
         await test_attendance.test(testing_bot, TEST_GUILD_ID)
-    except Exception as ex:
+    except AssertionError as ex:
         print('exception: ', type(ex).__name__ + ':', ex)
         print('--')
         exit_status = 1
@@ -55,10 +55,12 @@ async def on_ready():
     await run_tests()
 
 async def begin_tests():
-    await next(ch for ch in testing_bot.get_guild(TEST_GUILD_ID).text_channels if ch.name == 'instructor-commands').send('!begin-tests')
+    await next(ch for ch in testing_bot.get_guild(TEST_GUILD_ID).text_channels
+               if ch.name == 'instructor-commands').send('!begin-tests')
 
 async def end_tests():
-    await next(ch for ch in testing_bot.get_guild(TEST_GUILD_ID).text_channels if ch.name == 'instructor-commands').send('!end-tests')
+    await next(ch for ch in testing_bot.get_guild(TEST_GUILD_ID).text_channels
+               if ch.name == 'instructor-commands').send('!end-tests')
 
 if __name__ == '__main__':
     testing_bot.run(TOKEN)
